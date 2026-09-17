@@ -22,25 +22,49 @@ model = SentenceTransformer(
     device="cpu",
 )
 
-question = input("Ask a question: ").strip()
+def search(question: str, top_k: int = 3) -> list[dict]:
+    question = question.strip()
 
-if not question:
-    raise SystemExit("Please enter a question.")
+    if not question:
+        raise ValueError("Question cannot be empty.")
 
-question_embedding = model.encode(
-    question,
-    normalize_embeddings=True,
-    convert_to_numpy=True,
-)
+    if top_k < 1:
+        raise ValueError("top_k must be at least 1.")
 
-scores = embeddings @ question_embedding
-top_indices = np.argsort(scores)[::-1][:3]
+    question_embedding = model.encode(
+        question,
+        normalize_embeddings=True,
+        convert_to_numpy=True,
+    )
 
-for rank, index in enumerate(top_indices, start=1):
-    record = records[index]
+    scores = embeddings @ question_embedding
+    top_indices = np.argsort(scores)[::-1][:top_k]
 
-    print(f"\n--- Result {rank} ---")
-    print(f"Similarity: {scores[index]:.3f}")
-    print(f"Chunk: {record['chunk_id']}")
-    print(f"Text: {record['text']}")
-    print(f"Source: {record['source_url']}")
+    results = []
+
+    for index in top_indices:
+        record = records[index]
+
+        results.append({
+            **record,
+            "similarity": float(scores[index]),
+        })
+
+    return results
+
+
+if __name__ == "__main__":
+    question = input("Ask a question: ")
+
+    try:
+        results = search(question)
+
+        for rank, result in enumerate(results, start=1):
+            print(f"\n--- Result {rank} ---")
+            print(f"Similarity: {result['similarity']:.3f}")
+            print(f"Chunk: {result['chunk_id']}")
+            print(f"Text: {result['text']}")
+            print(f"Source: {result['source_url']}")
+
+    except ValueError as error:
+        print(f"Invalid input: {error}")
