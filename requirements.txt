@@ -1,8 +1,10 @@
 annotated-doc==0.0.5
+annotated-types==0.8.0
 anyio==4.15.1
 certifi==2026.7.22
 click==8.5.0
 cloudpickle==3.1.2
+fastapi==0.141.1
 filelock==4.0.0
 fsspec==2026.7.0
 h11==0.16.0
@@ -21,6 +23,8 @@ narwhals==2.26.0
 networkx==3.6.1
 numpy==2.5.3
 packaging==26.3
+pydantic==2.13.5
+pydantic_core==2.46.5
 Pygments==2.21.0
 PyYAML==6.0.3
 regex==2026.9.10
@@ -31,6 +35,7 @@ scipy==1.18.1
 sentence-transformers==6.0.1
 setuptools==84.0.0
 shellingham==1.5.4
+starlette==1.6.0
 sympy==1.14.0
 threadpoolctl==3.7.0
 tokenizers==0.23.2
@@ -38,4 +43,6 @@ torch==2.14.0
 tqdm==4.70.1
 transformers==5.17.0
 typer==0.27.2
+typing-inspection==0.4.4
 typing_extensions==4.16.0
+uvicorn==0.53.0
