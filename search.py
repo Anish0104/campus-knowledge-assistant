@@ -8,13 +8,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 processed_dir = PROJECT_ROOT / "data" / "processed"
 
 records = json.loads(
-    (processed_dir / "ms_cs_requirements_chunks.json").read_text(
+    (processed_dir / "chunks.json").read_text(
         encoding="utf-8"
     )
 )
 
 embeddings = np.load(
-    processed_dir / "ms_cs_requirements_embeddings.npy"
+    processed_dir / "embeddings.npy"
 )
 
 model = SentenceTransformer(
