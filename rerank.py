@@ -18,6 +18,9 @@ def rerank_search(
     question: str,
     top_k: int = 3,
     candidate_k: int = 7,
+    *,
+    campus: str | None = None,
+    program: str | None = None,
 ) -> list[dict]:
     question = question.strip()
 
@@ -27,7 +30,12 @@ def rerank_search(
     if top_k < 1 or candidate_k < top_k:
         raise ValueError("Require candidate_k >= top_k >= 1.")
 
-    candidates = search(question, top_k=candidate_k)
+    candidates = search(
+    question,
+    top_k=candidate_k,
+    campus=campus,
+    program=program,
+)
 
     if not candidates:
         return []

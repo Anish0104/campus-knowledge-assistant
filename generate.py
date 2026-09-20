@@ -6,6 +6,14 @@ from pydantic import BaseModel, Field
 from rerank import rerank_search
 
 
+FALLBACK_ANSWER = (
+    "I don't have enough information in the collected documents."
+)
+
+# Provisional cutoff. This is not a confidence percentage.
+MIN_RERANK_SCORE = 0.0
+
+
 class Claim(BaseModel):
     evidence_quote: str = Field(min_length=1)
     source_id: str = Field(min_length=1)
@@ -36,13 +44,40 @@ If no passage directly answers the question, return {"claims": []}.
 """
 
 
-def answer_question(question: str) -> dict:
+def answer_question(
+    question: str,
+    *,
+    campus: str | None = None,
+    program: str | None = None,
+) -> dict:
     question = question.strip()
 
     if not question:
         raise ValueError("Question cannot be blank.")
 
-    passages = rerank_search(question, top_k=1, candidate_k=7)
+    passages = rerank_search(
+        question,
+        top_k=1,
+        candidate_k=7,
+        campus=campus,
+        program=program,
+    )
+
+    # Reject weak matches before sending evidence to Ollama.
+    passages = [
+        passage
+        for passage in passages
+        if passage["rerank_score"] >= MIN_RERANK_SCORE
+    ]
+
+    if not passages:
+        return {
+            "question": question,
+            "answer": FALLBACK_ANSWER,
+            "claims": [],
+            "sources": [],
+        }
+
     schema = GroundedAnswer.model_json_schema()
 
     response = httpx.post(
@@ -127,7 +162,7 @@ def answer_question(question: str) -> dict:
     answer = (
         " ".join(sentences)
         if sentences
-        else "I don't have enough information in the collected documents."
+        else FALLBACK_ANSWER
     )
 
     return {

@@ -22,7 +22,13 @@ model = SentenceTransformer(
     device="cpu",
 )
 
-def search(question: str, top_k: int = 3) -> list[dict]:
+def search(
+    question: str,
+    top_k: int = 3,
+    *,
+    campus: str | None = None,
+    program: str | None = None,
+) -> list[dict]:
     question = question.strip()
 
     if not question:
@@ -31,26 +37,53 @@ def search(question: str, top_k: int = 3) -> list[dict]:
     if top_k < 1:
         raise ValueError("top_k must be at least 1.")
 
+    def normalize(value: str | None) -> str:
+        return " ".join((value or "").split()).casefold()
+
+    requested_campus = normalize(campus)
+    requested_program = normalize(program)
+
+    eligible_indices = []
+
+    for index, record in enumerate(records):
+        record_campus = normalize(record.get("campus"))
+        record_program = normalize(record.get("program"))
+
+        campus_matches = (
+            not requested_campus
+            or record_campus == requested_campus
+            or record_campus == "university-wide"
+        )
+
+        program_matches = (
+            not requested_program
+            or record_program == requested_program
+            or record_program == "not program-specific"
+        )
+
+        if campus_matches and program_matches:
+            eligible_indices.append(index)
+
+    if not eligible_indices:
+        return []
+
     question_embedding = model.encode(
         question,
         normalize_embeddings=True,
         convert_to_numpy=True,
     )
 
-    scores = embeddings @ question_embedding
-    top_indices = np.argsort(scores)[::-1][:top_k]
+    eligible_embeddings = embeddings[eligible_indices]
+    scores = eligible_embeddings @ question_embedding
+    ranked_positions = np.argsort(scores)[::-1][:top_k]
 
-    results = []
-
-    for index in top_indices:
-        record = records[index]
-
-        results.append({
-            **record,
-            "similarity": float(scores[index]),
-        })
-
-    return results
+    return [
+        {
+            **records[eligible_indices[position]],
+            "similarity": float(scores[position]),
+        }
+        for position in ranked_positions
+    ]
 
 
 if __name__ == "__main__":
