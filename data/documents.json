@@ -8,4 +8,15 @@
     "topic": "Degree requirements",
     "effective_year": null
   }
+  ,
+  {
+  "document_id": "library_interlibrary_loan",
+  "filename": "library_interlibrary_loan.txt",
+  "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
+  "campus": "University-wide",
+  "program": "Not program-specific",
+  "topic": "Interlibrary loan",
+  "effective_year": null
+}
+  
 ]
