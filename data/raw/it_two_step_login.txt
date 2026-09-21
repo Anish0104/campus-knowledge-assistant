@@ -1,0 +1,43 @@
+Two-step login
+
+Two-step login with Duo, also known as two-factor authentication, helps protect your account by adding an extra layer of security beyond your NetID and password. With two-step login, you will need to enter a three-digit code to confirm your identity in order to gain access to many online resources at the university.
+
+Enroll now Update iOS or Android for Duo
+
+Help with two-step login with Duo
+
+The following materials are available at the knowledge base within the Rutgers IT Help portal.
+
+Two-step login FAQ
+
+Do you have questions about Duo and two-step login? We’ve got answers.
+
+Overview of two-step login
+
+Learn about the basics of two-step login with Duo, including the benefits of enrolling.
+
+Enrollment guide
+
+Signing up for two-step login takes about five minutes. Here’s how.
+
+Using Duo in exam rooms
+
+How to use Duo in places that forbid mobile phones, such as exam rooms.
+
+Adding, removing or changing devices
+
+Find out how to add a new device or remove an old device in Duo.
+
+Getting help with Duo
+
+Wondering about international travel, bypass codes, or other issues? Get answers and assistance.
+
+Check whether your iOS or Android software works with Duo.
+
+Videos to learn about Duo
+
+Introduction to Duo security
+
+Getting started with Duo security
+
+What is two-factor authentication? (2FA)

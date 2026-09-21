@@ -7,16 +7,56 @@
     "program": "MS Computer Science",
     "topic": "Degree requirements",
     "effective_year": null
-  }
-  ,
+  },
   {
-  "document_id": "library_interlibrary_loan",
-  "filename": "library_interlibrary_loan.txt",
-  "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
-  "campus": "University-wide",
-  "program": "Not program-specific",
-  "topic": "Interlibrary loan",
-  "effective_year": null
-}
-  
+    "document_id": "library_interlibrary_loan",
+    "filename": "library_interlibrary_loan.txt",
+    "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Interlibrary loan",
+    "effective_year": null
+  },
+  {
+    "document_id": "it_eduroam",
+    "filename": "it_eduroam.txt",
+    "source_url": "https://it.rutgers.edu/eduroam/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "eduroam wireless access",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:50.802978+00:00",
+    "title": "eduroam",
+    "content_sha256": "d7d4508302bfd081fdac9d41d5919745b2e24e32852b39f7d550d7712fd10d51",
+    "word_count": 152,
+    "extraction_selector": "main"
+  },
+  {
+    "document_id": "it_two_step_login",
+    "filename": "it_two_step_login.txt",
+    "source_url": "https://it.rutgers.edu/two-step-login/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Two-step login with Duo",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:51.861316+00:00",
+    "title": "Two-step login",
+    "content_sha256": "6d127e9e2776c685d4945a34335222f2bb4b4cfccc888d06a623d10d30f56624",
+    "word_count": 214,
+    "extraction_selector": "main"
+  },
+  {
+    "document_id": "it_microsoft_office",
+    "filename": "it_microsoft_office.txt",
+    "source_url": "https://it.rutgers.edu/microsoft-office/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Microsoft Office access",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:52.902732+00:00",
+    "title": "Microsoft Office",
+    "content_sha256": "1323625dab22f410a0dba57acac0e3a63602ea24f4dbf894710a3572bea3d057",
+    "word_count": 192,
+    "extraction_selector": "main"
+  }
 ]

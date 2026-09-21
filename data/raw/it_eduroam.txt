@@ -1,0 +1,33 @@
+eduroam
+
+eduroam is a free and secure wireless network available to the Rutgers community when visiting participating universities.
+
+Why use eduroam?
+
+Connect to free WiFi at member universities in more than 100 countries
+
+Install on your device and log in with your NetID
+
+Security exceeds typical commercial hotspots
+
+Visitors from member institutions can connect at Rutgers
+
+Instructions for installing and connecting to eduroam
+
+Rutgers students, staff, and faculty
+
+Configure your device and log in with your NetID and password.
+
+Visitors from participating institutions
+
+Work with your home institution to get set up for eduroam.
+
+Help & Support
+
+Get help
+
+Members of the Rutgers community can contact the Help Desk if they run into issues connecting to eduroam. ( NOTE : Visitors should contact IT staff at their home institution.)
+
+Looking for RUWireless?
+
+Members of the Rutgers community can access a wireless connection through RUWireless Secure while guests can receive access through RUWireless.

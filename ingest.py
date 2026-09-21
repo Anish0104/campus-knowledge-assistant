@@ -12,6 +12,10 @@ OVERLAP = 30
 
 
 def chunk_text(text: str) -> list[str]:
+    """Create overlapping word windows."""
+    if not 0 <= OVERLAP < CHUNK_SIZE:
+        raise ValueError("Require 0 <= OVERLAP < CHUNK_SIZE.")
+
     words = text.split()
     step = CHUNK_SIZE - OVERLAP
     chunks = []

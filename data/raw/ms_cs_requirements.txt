@@ -1,0 +1,25 @@
+Program Course Requirements:
+MSCS Students require 36 credits (12 courses) in total, and they must meet the following requirements:
+- Two from Category A
+- Two from Category B
+- Four additional courses from Category A OR Category B (M.S. Category A, and M.S. Category B). Note: Two of these additional courses must be from Category A OR Category B; the other two additional courses may be used for Essay Option (Category A or Category B) OR Thesis Option (704, 705, 706; 601, 602)
+- Four from the list of courses acceptable for MSCS credit: approved courses from other departments, additional Category A or B courses, CS Seminars, acceptable undergraduate courses, OR independent study. Note 1: at most two of the four courses may be independent study. Note 2: refer to the SGS and Global Policies below for online courses. Note 3: non-MSCS course registration requires office (email) approval based on extraordinary circumstances.
+- Essay Option (A report from project-based MSCS courses or work approved as an essay) OR Thesis Option [equivalent to 2 courses (6 credits)]. Note: courses supporting the Essay or Thesis Options may also satisfy above requirements/conditions under "Four additional courses"
+Graduation Requirements:
+Students need to maintain a minimum of 3 GPA..
+Student need to have no more than 2 Cs or lower.
+School of Graduate Studies Policies
+Rutgers Global Policies
+Essay/Thesis Requirements:
+In addition to the coursework requirements for the M.S. degree that are established by the School of Graduate Studies, the student must choose either the Essay Option or Thesis Option as described below. The essay or thesis must be written in English (except that some portion may require a computer language, with English documentation), it must be the student's own work, and it must demonstrate the student's facility for expository writing.
+
+Essay Option:
+The student must write and submit an expository paper in a field of computer science that was covered in the student's course work. It may be a paper written as part of a course in computer science, or it may be based on such a course. The essay "must" be appropriately formatted and contain: Title, Author(s), Abstract, and References. A paper that has previously been submitted for a course must have received a grade of B or higher. If the essay you're planning on submitting is a group assignment, you'll need to provide cover page(s) detailing your contributions to the project along with the rest of the project report. Corresponding presentation slides are required with all essay submissions. When relevant, a video and documentation or user's manual are recommended but not required. No extra credit is given for the preparation of the essay. The essay must be approved by a member of the Graduate Faculty of the Department of Computer Science followed by the M.S. Director.
+Thesis Option:
+The student must write a Master's Thesis and must register for exactly six credits of 198:704-706. Upon initial registration, the student is required to provide the MS Director with written confirmation from the faculty member agreeing to supervise their thesis.
+The Master's Thesis must be a written account of a critical and scholarly investigation in an area of computer science. It may represent: (a) a piece of independent research (extensions and improvements of work in a given part of the field are acceptable at a level of novelty which is less than that required for a doctoral thesis); (b) a work of synthesis that gives new significance and insight to previously-known results; or (c) an important constructive contribution to the development of a computer application. The thesis may not be a digest of known results from the literature, a summary of a published report, company classified or government classified material, or dependent for its background on other non-available reports. The thesis topic should be chosen by mutual agreement between the student and their faculty supervisor. The thesis must be approved by the student's thesis committee. The committee consists of the thesis supervisor and two other faculty members who are determined in consultation with the thesis supervisor. The advisor and members of the thesis committee must be members of the Graduate Faculty in Computer Science.
+In addition to submitting a copy of the completed Master's Thesis to the MS Director, the student is required to follow all thesis formatting, content, and submission guidelines from the School of Graduate Studies.
+Degree Completion Processing:
+[IMPORTANT: ALL INFORMATION AND INSTRUCTIONS FOR GRADUATION FORMS/MATERIALS ARE PROVIDED IN THE APPROPRIATE CANVAS MODULES FOR MSCS] There are several forms that must be filled out and submitted by the appropriate deadlines in order for the student who has fulfilled the above requirements to receive a Master's Degree. It is the student's responsibility that all necessary paperwork be completed on time. Information and forms can be obtained from the M.S. Administrative Assistant
+
+ 
