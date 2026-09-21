@@ -5,8 +5,40 @@ from pydantic import BaseModel, Field, field_validator
 from generate import answer_question
 from search import search
 
+from pathlib import Path
+
+from fastapi.responses import FileResponse
+
+from pathlib import Path
+
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI(title="Rutgers Knowledge Assistant")
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+STATIC_DIR = PROJECT_ROOT / "static"
+
+app.mount(
+    "/static",
+    StaticFiles(directory=STATIC_DIR),
+    name="static",
+)
+
+
+@app.get("/", include_in_schema=False)
+def homepage():
+    return FileResponse(STATIC_DIR / "index.html")
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+
+@app.get("/", include_in_schema=False)
+def home():
+    return FileResponse(
+        PROJECT_ROOT / "static" / "index.html"
+    )
 
 
 class AskRequest(BaseModel):

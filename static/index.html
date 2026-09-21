@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf6ef">
+  <meta
+    name="description"
+    content="Find answers in collected Rutgers documents with supporting sources."
+  >
+
+  <title>Margin | Your campus, a little clearer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23bc2634'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Arial' font-size='48' font-weight='bold' fill='%23faf6ef'%3Em%3C/text%3E%3C/svg%3E"
+  >
+
+  <style>
+    :root {
+      --paper: #faf6ef;
+      --surface: #fffcf8;
+      --ink: #202024;
+      --muted: #62616a;
+      --scarlet: #bc2634;
+      --scarlet-hover: #9d1d29;
+      --line: #ded7ce;
+      --display: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      --body: "Nunito Sans", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      line-height: 1.6;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button,
+    select,
+    summary {
+      cursor: pointer;
+    }
+
+    button,
+    a,
+    input,
+    textarea,
+    select {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    a {
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--scarlet);
+      outline-offset: 4px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      z-index: 10;
+      padding: 12px;
+      background: var(--surface);
+    }
+
+    .skip-link:focus {
+      top: 12px;
+    }
+
+    .header {
+      max-width: 1440px;
+      margin: auto;
+      padding: 26px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      color: var(--scarlet);
+      font-family: var(--display);
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .nav a {
+      text-decoration: none;
+    }
+
+    .nav a:hover {
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+
+    .nav-note {
+      padding-left: 26px;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .hero {
+      width: min(1440px, 100%);
+      margin: 36px auto 0;
+      padding: 24px 32px 52px;
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 660px)
+        minmax(0, 1fr);
+      align-items: start;
+      gap: 36px;
+    }
+
+    .hero-content {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(44px, 4.7vw, 68px);
+      font-weight: 700;
+      letter-spacing: -1.6px;
+      line-height: 1.04;
+      text-transform: uppercase;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--scarlet);
+    }
+
+    .intro {
+      max-width: 510px;
+      margin: 22px auto 32px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* Paper note replaces the stock photograph. */
+    .campus-note {
+      width: 100%;
+      max-width: 215px;
+      margin: 120px auto 0;
+      padding: 25px 21px;
+      border: 1px solid #ded3c4;
+      border-radius: 2px;
+      background: #f1e8da;
+      text-align: left;
+      transform: rotate(-3deg);
+    }
+
+    .note-label {
+      display: block;
+      color: var(--scarlet);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      line-height: 1.6;
+    }
+
+    .note-title {
+      margin: 24px 0;
+      font-family: var(--display);
+      font-size: 29px;
+      font-weight: 500;
+      line-height: 1.16;
+      letter-spacing: -.5px;
+    }
+
+    .note-rule {
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--scarlet);
+    }
+
+    .note-description {
+      margin: 18px 0;
+      color: #5f564e;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .note-link {
+      color: var(--scarlet);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    .guide-visual {
+      width: 100%;
+      max-width: 205px;
+      margin: 265px auto 0;
+    }
+
+    .guide {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .question-panel {
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: 0 7px 24px rgb(53 36 20 / 5%);
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid #bbb7b3;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--ink);
+    }
+
+    textarea {
+      display: block;
+      min-height: 110px;
+      padding: 13px 14px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    textarea::placeholder,
+    input::placeholder {
+      color: #75747b;
+    }
+
+    input,
+    select {
+      min-height: 46px;
+      padding: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .form-field {
+      min-width: 0;
+    }
+
+    .primary {
+      min-height: 46px;
+      padding: 11px 20px;
+      border: 1px solid var(--scarlet);
+      border-radius: 5px;
+      background: var(--scarlet);
+      color: white;
+      font-weight: 800;
+    }
+
+    .primary:hover {
+      background: var(--scarlet-hover);
+    }
+
+    button:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .help {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 23px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .example {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid #dbb6b5;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--scarlet);
+    }
+
+    .example:hover {
+      background: #f4e9e3;
+    }
+
+    .status {
+      margin: 15px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status:empty {
+      display: none;
+    }
+
+    .status.error {
+      color: #9b202a;
+    }
+
+    .result,
+    .loading {
+      width: min(780px, calc(100% - 40px));
+      margin: 0 auto 50px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      scroll-margin-top: 24px;
+    }
+
+    .result-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .copy {
+      flex-shrink: 0;
+      min-height: 40px;
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: transparent;
+      font-size: 13px;
+    }
+
+    .copy:hover {
+      background: var(--paper);
+    }
+
+    .answer {
+      font-size: 18px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .source {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      overflow-wrap: anywhere;
+    }
+
+    .source a {
+      color: var(--scarlet);
+      font-weight: 800;
+      text-underline-offset: 3px;
+    }
+
+    .source-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    details {
+      margin-top: 12px;
+    }
+
+    summary {
+      font-size: 14px;
+    }
+
+    details p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .loading p {
+      margin-top: 0;
+    }
+
+    .skeleton {
+      height: 14px;
+      margin-top: 13px;
+      border-radius: 3px;
+      background: #e7e0d8;
+      animation: breathe 1.5s ease-in-out infinite alternate;
+    }
+
+    .skeleton:last-child {
+      width: 65%;
+    }
+
+    @keyframes breathe {
+      from { opacity: .45; }
+      to { opacity: 1; }
+    }
+
+    .coverage {
+      width: min(700px, calc(100% - 40px));
+      margin: 0 auto 65px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: 30px;
+    }
+
+    .coverage h2 {
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .coverage-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 10px;
+      border-bottom: 1px solid var(--line);
+      text-decoration: none;
+    }
+
+    .coverage-row:hover .coverage-title {
+      color: var(--scarlet);
+    }
+
+    .coverage-number {
+      color: var(--scarlet);
+      font-family: var(--display);
+      font-size: 22px;
+    }
+
+    .coverage-title {
+      display: block;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .coverage-description {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .coverage-note {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .footer {
+      max-width: 1440px;
+      margin: auto;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer p {
+      max-width: 640px;
+      margin: 0;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    dialog {
+      width: min(600px, calc(100% - 32px));
+      max-height: 85vh;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    dialog::backdrop {
+      background: rgb(20 20 20 / 40%);
+    }
+
+    dialog h2 {
+      margin-bottom: 20px;
+    }
+
+    dialog h3 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    dialog p {
+      font-size: 14px;
+    }
+
+    .draft {
+      color: var(--scarlet);
+      font-weight: 800;
+    }
+
+    @media (max-width: 1200px) {
+      .hero {
+        grid-template-columns:
+          minmax(0, 1fr)
+          minmax(0, 620px)
+          minmax(0, 1fr);
+        gap: 24px;
+        padding-inline: 24px;
+      }
+
+      h1 {
+        font-size: 56px;
+      }
+
+      .campus-note {
+        margin-top: 110px;
+        padding: 20px 14px;
+        transform: none;
+      }
+
+      .note-title {
+        font-size: 25px;
+      }
+
+      .guide-visual {
+        margin-top: 280px;
+      }
+
+      .form-row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .form-row .primary {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .hero {
+        display: block;
+        max-width: 700px;
+      }
+
+      .campus-note,
+      .guide-visual {
+        display: none;
+      }
+
+      .nav-note {
+        display: none;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .header {
+        padding: 22px 20px;
+      }
+
+      .brand {
+        font-size: 32px;
+      }
+
+      .nav {
+        gap: 16px;
+        font-size: 12px;
+      }
+
+      .hero {
+        margin-top: 12px;
+        padding: 18px 20px 38px;
+      }
+
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 2px;
+      }
+
+      h1 {
+        font-size: clamp(36px, 9.5vw, 50px);
+        letter-spacing: -1px;
+      }
+
+      .intro {
+        margin: 18px auto 25px;
+        font-size: 16px;
+      }
+
+      .question-panel {
+        padding: 19px;
+      }
+
+      .form-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .form-row .primary {
+        grid-column: auto;
+      }
+
+      .examples > span {
+        width: 100%;
+      }
+
+      h2 {
+        font-size: 26px;
+      }
+
+      .result,
+      .loading {
+        padding: 22px;
+      }
+
+      .result-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer {
+        flex-direction: column;
+        padding: 22px 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#question">Skip to question</a>
+
+  <header class="header">
+    <a class="brand" href="/" aria-label="Margin home">margin</a>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#question">Ask a question</a>
+      <a href="#coverage">Our sources</a>
+      <span class="nav-note">For Rutgers students</span>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <aside class="campus-note" aria-label="A note about Margin">
+        <span class="note-label">A NOTE FROM MARGIN</span>
+
+        <p class="note-title">
+          Big campus.<br>
+          Small questions.<br>
+          Start here.
+        </p>
+
+        <span class="note-rule" aria-hidden="true"></span>
+
+        <p class="note-description">
+          Degree requirements and library borrowing,
+          with the source close by.
+        </p>
+
+        <a class="note-link" href="#coverage">
+          Explore the collection
+        </a>
+      </aside>
+
+      <div class="hero-content">
+        <p class="eyebrow">A little help with campus life</p>
+
+        <h1 id="hero-title">
+          Your campus.
+          <span>A little clearer.</span>
+        </h1>
+
+        <p class="intro">
+          Ask about Rutgers. Find answers in collected documents,
+          with sources you can open and read.
+        </p>
+
+        <form id="ask-form" class="question-panel">
+          <label for="question">What would you like to know?</label>
+
+          <textarea
+            id="question"
+            name="question"
+            required
+            maxlength="1000"
+            placeholder="Can I borrow textbooks through interlibrary loan?"
+            aria-describedby="scope-help"
+          ></textarea>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="campus">Campus</label>
+              <select id="campus" name="campus">
+                <option value="">All campuses</option>
+                <option>New Brunswick</option>
+                <option>Newark</option>
+                <option>Camden</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="program">Program</label>
+              <input
+                id="program"
+                name="program"
+                list="program-options"
+                maxlength="100"
+                placeholder="Optional"
+              >
+              <datalist id="program-options">
+                <option value="MS Computer Science"></option>
+                <option value="MBA"></option>
+              </datalist>
+            </div>
+
+            <button class="primary" id="submit-button" type="submit">
+              Find an answer
+            </button>
+          </div>
+
+          <p class="help" id="scope-help">
+            For degree questions, choose your campus and enter your program.
+          </p>
+
+          <p
+            class="status"
+            id="status"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+
+        <div class="examples" aria-label="Example questions">
+          <span>Try asking about:</span>
+
+          <button class="example" type="button" data-example="thesis">
+            Thesis approval
+          </button>
+
+          <button class="example" type="button" data-example="library">
+            Library borrowing
+          </button>
+        </div>
+      </div>
+
+      <div class="guide-visual" aria-hidden="true">
+        <img
+          class="guide"
+          src="/static/assets/book-guide.png"
+          alt=""
+        >
+      </div>
+    </section>
+
+    <section
+      class="loading"
+      id="loading"
+      hidden
+      aria-label="Finding an answer"
+    >
+      <p>Looking through the collected documents...</p>
+      <div aria-hidden="true">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </section>
+
+    <section
+      class="result"
+      id="result"
+      hidden
+      aria-labelledby="answer-title"
+    >
+      <div class="result-heading">
+        <h2 id="answer-title" tabindex="-1">Here’s what we found.</h2>
+        <button class="copy" type="button" id="copy-answer">
+          Copy answer
+        </button>
+      </div>
+
+      <p class="answer" id="answer"></p>
+      <div id="sources"></div>
+      <p class="status" id="copy-status" role="status"></p>
+    </section>
+
+    <section
+      class="coverage"
+      id="coverage"
+      aria-labelledby="coverage-title"
+    >
+      <h2 id="coverage-title">A small collection. A useful start.</h2>
+
+      <a
+        class="coverage-row"
+        href="https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="coverage-number" aria-hidden="true">01</span>
+        <span>
+          <span class="coverage-title">Degree requirements</span>
+          <span class="coverage-description">
+            MS Computer Science · New Brunswick
+          </span>
+        </span>
+      </a>
+
+      <a
+        class="coverage-row"
+        href="https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="coverage-number" aria-hidden="true">02</span>
+        <span>
+          <span class="coverage-title">Library borrowing</span>
+          <span class="coverage-description">
+            Rutgers Libraries · Interlibrary loan
+          </span>
+        </span>
+      </a>
+
+      <p class="coverage-note">
+        Answers are limited to the documents collected so far.
+        Source links open in a new tab.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Independent student project.
+      Not affiliated with or endorsed by Rutgers University.
+    </p>
+
+    <div class="footer-links">
+      <a href="#privacy" data-dialog="privacy">Privacy (draft)</a>
+      <a href="#terms" data-dialog="terms">Terms (draft)</a>
+      <a href="/docs">API docs</a>
+    </div>
+  </footer>
+
+  <dialog id="privacy" aria-labelledby="privacy-title">
+    <h2 id="privacy-title">Privacy notice</h2>
+    <p class="draft">Draft for review before public deployment.</p>
+
+    <h3>Your questions</h3>
+    <p>
+      The form sends your question, campus, and program to this
+      application's server. The current local setup uses Ollama
+      to process questions with retrieved document passages.
+    </p>
+
+    <h3>Browser storage and external services</h3>
+    <p>
+      This frontend does not save conversation history in browser
+      storage. Fonts load from Google Fonts. Those requests disclose
+      connection information, such as your IP address, to that service.
+    </p>
+
+    <h3>Details still to confirm</h3>
+    <p>
+      Hosting provider, server logging, retention, operator contact
+      details, and any future analytics must be documented before
+      public release. Avoid entering personal or confidential information.
+    </p>
+
+    <form method="dialog">
+      <button class="primary">Close</button>
+    </form>
+  </dialog>
+
+  <dialog id="terms" aria-labelledby="terms-title">
+    <h2 id="terms-title">Terms of use</h2>
+    <p class="draft">Draft for review before public deployment.</p>
+
+    <p>
+      Margin is an independent student prototype for exploring
+      collected Rutgers documents. It is not an official university service.
+    </p>
+
+    <p>
+      Coverage is incomplete. Answers may be inaccurate or based
+      on outdated material. Check the linked source and contact
+      the relevant university office before relying on an answer
+      for academic decisions.
+    </p>
+
+    <p>
+      Operator contact information and terms appropriate to the
+      eventual hosting and usage model still need review.
+    </p>
+
+    <form method="dialog">
+      <button class="primary">Close</button>
+    </form>
+  </dialog>
+
+  <script>
+    const form = document.querySelector("#ask-form");
+    const question = document.querySelector("#question");
+    const campus = document.querySelector("#campus");
+    const program = document.querySelector("#program");
+    const submit = document.querySelector("#submit-button");
+    const status = document.querySelector("#status");
+    const loading = document.querySelector("#loading");
+    const result = document.querySelector("#result");
+    const answer = document.querySelector("#answer");
+    const sources = document.querySelector("#sources");
+    const answerTitle = document.querySelector("#answer-title");
+    const copyButton = document.querySelector("#copy-answer");
+    const copyStatus = document.querySelector("#copy-status");
+
+    let busy = false;
+
+    const examples = {
+      thesis: {
+        question: "Who approves my thesis?",
+        campus: "New Brunswick",
+        program: "MS Computer Science"
+      },
+      library: {
+        question: "Can I borrow required textbooks through interlibrary loan?",
+        campus: "",
+        program: ""
+      }
+    };
+
+    document.querySelectorAll("[data-example]").forEach(button => {
+      button.addEventListener("click", () => {
+        const example = examples[button.dataset.example];
+
+        question.value = example.question;
+        campus.value = example.campus;
+        program.value = example.program;
+
+        status.textContent = "";
+        question.focus();
+      });
+    });
+
+    function setBusy(value) {
+      busy = value;
+      form.setAttribute("aria-busy", String(value));
+
+      form.querySelectorAll("input, textarea, select, button").forEach(
+        element => {
+          element.disabled = value;
+        }
+      );
+
+      document.querySelectorAll("[data-example]").forEach(button => {
+        button.disabled = value;
+      });
+
+      submit.textContent = value
+        ? "Finding an answer..."
+        : "Find an answer";
+
+      loading.hidden = !value;
+    }
+
+    function sourceTitle(source) {
+      if (source.document_id === "ms_cs_requirements") {
+        return "MS Computer Science degree requirements";
+      }
+
+      if (source.document_id === "library_interlibrary_loan") {
+        return "Rutgers Libraries interlibrary loan";
+      }
+
+      return source.document_id || "Supporting document";
+    }
+
+    function renderSource(source) {
+      const container = document.createElement("article");
+      container.className = "source";
+
+      const heading = document.createElement("div");
+      let url = null;
+
+      try {
+        url = new URL(source.source_url);
+      } catch {
+        url = null;
+      }
+
+      if (url && ["https:", "http:"].includes(url.protocol)) {
+        const link = document.createElement("a");
+
+        link.href = url.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = sourceTitle(source);
+
+        heading.append(link);
+      } else {
+        heading.textContent = sourceTitle(source);
+      }
+
+      const meta = document.createElement("p");
+      meta.className = "source-meta";
+      meta.textContent = [
+        source.campus,
+        source.program,
+        source.chunk_id
+      ].filter(Boolean).join(" · ");
+
+      const details = document.createElement("details");
+      const summary = document.createElement("summary");
+      const passage = document.createElement("p");
+
+      summary.textContent = "Read the supporting passage";
+      passage.textContent = source.text || "No passage was returned.";
+
+      details.append(summary, passage);
+      container.append(heading, meta, details);
+
+      return container;
+    }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (busy) return;
+
+      const text = question.value.trim();
+
+      if (!text) {
+        status.textContent = "Please enter a question first.";
+        status.className = "status error";
+        question.focus();
+        return;
+      }
+
+      const payload = {
+        question: text,
+        campus: campus.value || null,
+        program: program.value.trim() || null
+      };
+
+      result.hidden = true;
+      sources.replaceChildren();
+      copyStatus.textContent = "";
+      status.className = "status";
+      status.textContent =
+        "Searching documents and checking supporting evidence.";
+
+      setBusy(true);
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 180000);
+      let succeeded = false;
+
+      try {
+        const response = await fetch("/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          const detail = data?.detail;
+          let message;
+
+          if (typeof detail === "string") {
+            message = detail;
+          } else if (Array.isArray(detail)) {
+            message = detail
+              .map(item => item.msg || "Invalid input.")
+              .join(" ");
+          } else {
+            message =
+              `The request failed (${response.status}). Please try again.`;
+          }
+
+          throw new Error(message);
+        }
+
+        if (
+          !data ||
+          typeof data.answer !== "string" ||
+          !Array.isArray(data.sources)
+        ) {
+          throw new Error("The server returned an unexpected response.");
+        }
+
+        const validSources = data.sources.filter(
+          source => source && typeof source === "object"
+        );
+
+        answer.textContent = data.answer;
+
+        answerTitle.textContent = validSources.length
+          ? "Here’s what we found."
+          : "No supporting answer yet.";
+
+        validSources.forEach(source => {
+          sources.append(renderSource(source));
+        });
+
+        status.textContent = validSources.length
+          ? "Answer ready. Open the source to check its context."
+          : "The collected documents do not support an answer to this question.";
+
+        result.hidden = false;
+        succeeded = true;
+      } catch (error) {
+        status.className = "status error";
+
+        if (error.name === "AbortError") {
+          status.textContent =
+            "This request took too long. Check Ollama and try again.";
+        } else if (error instanceof TypeError) {
+          status.textContent =
+            "Could not reach the server. Check that FastAPI is running.";
+        } else {
+          status.textContent = error.message;
+        }
+      } finally {
+        clearTimeout(timeout);
+        setBusy(false);
+
+        if (succeeded) {
+          answerTitle.focus({ preventScroll: true });
+          result.scrollIntoView({
+            behavior: "auto",
+            block: "nearest"
+          });
+        }
+      }
+    });
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(answer.textContent);
+        copyStatus.textContent = "Answer copied.";
+      } catch {
+        copyStatus.textContent =
+          "Copy is unavailable here. Select the answer text to copy it.";
+      }
+    });
+
+    document.querySelectorAll("[data-dialog]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        document.getElementById(link.dataset.dialog).showModal();
+      });
+    });
+
+    const guide = document.querySelector(".guide");
+
+    function hideMissingGuide() {
+      guide.parentElement.style.visibility = "hidden";
+    }
+
+    guide.addEventListener("error", hideMissingGuide);
+
+    if (guide.complete && guide.naturalWidth === 0) {
+      hideMissingGuide();
+    }
+  </script>
+</body>
+</html>
