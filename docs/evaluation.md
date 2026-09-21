@@ -27,3 +27,19 @@ Using campus/program request fields and a provisional rerank cutoff of 0.0:
 Limitations: scope is not automatically extracted from question text.
 The cutoff has only been checked on these development examples.
 Quote matching does not guarantee that a quote answers the question.
+## Automated development regression checks
+
+Run with: python evaluate.py
+
+Observed result: 6 passed, 0 failed, 0 errors.
+
+Checks cover:
+- MSCS thesis approval with supporting evidence.
+- Interlibrary loan eligibility.
+- Required textbook borrowing restrictions.
+- Abstention for unsupported dining hours.
+- Abstention for unsupported Newark MBA thesis requirements.
+- University-wide library access with Newark MBA filters.
+
+These are known development cases, not a held-out accuracy benchmark.
+The checks call Python functions directly, not HTTP or the frontend.
