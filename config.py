@@ -16,8 +16,13 @@ CHUNKS_PATH = PROCESSED_DIR / "chunks.json"
 EMBEDDINGS_PATH = PROCESSED_DIR / "embeddings.npy"
 
 # Retrieval models (downloaded from Hugging Face on first use).
-EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L6-v2"
+# Either a Hugging Face model ID or a local folder path.
+EMBEDDING_MODEL = os.environ.get(
+    "EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
+)
+RERANKER_MODEL = os.environ.get(
+    "RERANKER_MODEL", "cross-encoder/ms-marco-MiniLM-L6-v2"
+)
 
 # Local language model served by Ollama.
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")

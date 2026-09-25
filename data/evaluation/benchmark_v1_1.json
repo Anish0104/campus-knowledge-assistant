@@ -1,7 +1,7 @@
 {
   "name": "margin_curated_v1",
   "labels_reviewed": true,
-  "description": "Source-derived evaluation on five documents. Not an independent or general-accuracy benchmark. Topic-overlap flags are provisional and need review.",
+  "description": "Source-derived evaluation on five documents. Not an independent or general-accuracy benchmark. Topic-overlap flags are provisional and need review. Gold chunk labels are derived from reviewed evidence_phrases by data/evaluation/relabel.py.",
   "cases": [
     {
       "id": "s01",
@@ -11,6 +11,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_001"
+      ],
+      "evidence_phrases": [
+        "MSCS Students require 36 credits (12 courses) in total"
       ],
       "expected_answer": "36 credits, equivalent to 12 courses.",
       "development_topic_overlap": true
@@ -24,6 +27,9 @@
       "relevant_chunk_ids": [
         "ms_cs_requirements_001"
       ],
+      "evidence_phrases": [
+        "- Two from Category A"
+      ],
       "expected_answer": "Two Category A courses.",
       "development_topic_overlap": false
     },
@@ -35,6 +41,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_001"
+      ],
+      "evidence_phrases": [
+        "- Two from Category B"
       ],
       "expected_answer": "Two Category B courses.",
       "development_topic_overlap": false
@@ -49,6 +58,9 @@
         "ms_cs_requirements_001",
         "ms_cs_requirements_002"
       ],
+      "evidence_phrases": [
+        "at most two of the four courses may be independent study"
+      ],
       "expected_answer": "At most two of those four courses.",
       "development_topic_overlap": false
     },
@@ -60,6 +72,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_002"
+      ],
+      "evidence_phrases": [
+        "Students need to maintain a minimum of 3 GPA"
       ],
       "expected_answer": "A minimum GPA of 3.",
       "development_topic_overlap": false
@@ -73,6 +88,9 @@
       "relevant_chunk_ids": [
         "ms_cs_requirements_002"
       ],
+      "evidence_phrases": [
+        "Student need to have no more than 2 Cs or lower"
+      ],
       "expected_answer": "No more than two.",
       "development_topic_overlap": false
     },
@@ -84,6 +102,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_003"
+      ],
+      "evidence_phrases": [
+        "The essay or thesis must be written in English"
       ],
       "expected_answer": "English, except computer-language portions with English documentation.",
       "development_topic_overlap": false
@@ -97,6 +118,9 @@
       "relevant_chunk_ids": [
         "ms_cs_requirements_003"
       ],
+      "evidence_phrases": [
+        "contain: Title, Author(s), Abstract, and References"
+      ],
       "expected_answer": "Title, authors, abstract, and references.",
       "development_topic_overlap": false
     },
@@ -108,6 +132,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_003"
+      ],
+      "evidence_phrases": [
+        "must have received a grade of B or higher"
       ],
       "expected_answer": "B or higher.",
       "development_topic_overlap": false
@@ -121,6 +148,9 @@
       "relevant_chunk_ids": [
         "ms_cs_requirements_003"
       ],
+      "evidence_phrases": [
+        "you'll need to provide cover page(s) detailing your contributions"
+      ],
       "expected_answer": "Cover pages detailing my contributions, along with the project report.",
       "development_topic_overlap": false
     },
@@ -132,6 +162,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_004"
+      ],
+      "evidence_phrases": [
+        "Corresponding presentation slides are required with all essay submissions"
       ],
       "expected_answer": "Yes, corresponding presentation slides are required.",
       "development_topic_overlap": false
@@ -145,6 +178,9 @@
       "relevant_chunk_ids": [
         "ms_cs_requirements_004"
       ],
+      "evidence_phrases": [
+        "No extra credit is given for the preparation of the essay"
+      ],
       "expected_answer": "No.",
       "development_topic_overlap": false
     },
@@ -156,6 +192,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_004"
+      ],
+      "evidence_phrases": [
+        "The essay must be approved by a member of the Graduate Faculty of the Department of Computer Science followed by the M.S. Director"
       ],
       "expected_answer": "A Computer Science Graduate Faculty member, followed by the MS Director.",
       "development_topic_overlap": true
@@ -169,6 +208,9 @@
       "relevant_chunk_ids": [
         "ms_cs_requirements_004"
       ],
+      "evidence_phrases": [
+        "must register for exactly six credits of 198:704-706"
+      ],
       "expected_answer": "Exactly six credits.",
       "development_topic_overlap": false
     },
@@ -180,6 +222,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "ms_cs_requirements_006"
+      ],
+      "evidence_phrases": [
+        "The committee consists of the thesis supervisor and two other faculty members"
       ],
       "expected_answer": "The thesis supervisor and two other faculty members selected in consultation with the supervisor.",
       "development_topic_overlap": true
@@ -194,6 +239,9 @@
         "ms_cs_requirements_005",
         "ms_cs_requirements_006"
       ],
+      "evidence_phrases": [
+        "The thesis topic should be chosen by mutual agreement between the student and their faculty supervisor"
+      ],
       "expected_answer": "By mutual agreement with the faculty supervisor.",
       "development_topic_overlap": false
     },
@@ -205,6 +253,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "library_interlibrary_loan_001"
+      ],
+      "evidence_phrases": [
+        "you'll receive an email when your item is ready for pickup or available to download"
       ],
       "expected_answer": "An email will notify me when it is ready for pickup or download.",
       "development_topic_overlap": false
@@ -219,6 +270,9 @@
         "library_interlibrary_loan_001",
         "library_interlibrary_loan_002"
       ],
+      "evidence_phrases": [
+        "Articles and book chapters are delivered electronically"
+      ],
       "expected_answer": "Electronically.",
       "development_topic_overlap": false
     },
@@ -232,6 +286,9 @@
         "library_interlibrary_loan_001",
         "library_interlibrary_loan_002"
       ],
+      "evidence_phrases": [
+        "If an item in QuickSearch is unavailable, sign in to view your request options"
+      ],
       "expected_answer": "Sign in.",
       "development_topic_overlap": false
     },
@@ -243,6 +300,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "library_interlibrary_loan_002"
+      ],
+      "evidence_phrases": [
+        "All other materials can be picked up at your Rutgers library of choice or delivered to your home"
       ],
       "expected_answer": "At a Rutgers library of my choice or at home.",
       "development_topic_overlap": false
@@ -257,6 +317,9 @@
         "library_interlibrary_loan_002",
         "library_interlibrary_loan_003"
       ],
+      "evidence_phrases": [
+        "Turnaround time is fast (usually 3-5 business days)"
+      ],
       "expected_answer": "Usually three to five business days.",
       "development_topic_overlap": false
     },
@@ -270,6 +333,9 @@
         "library_interlibrary_loan_002",
         "library_interlibrary_loan_003"
       ],
+      "evidence_phrases": [
+        "the loan period is 12 weeks"
+      ],
       "expected_answer": "12 weeks.",
       "development_topic_overlap": false
     },
@@ -281,6 +347,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "library_interlibrary_loan_003"
+      ],
+      "evidence_phrases": [
+        "If the item you desire was not found in QuickSearch or EZBorrow, place your request via ILLiad"
       ],
       "expected_answer": "ILLiad.",
       "development_topic_overlap": false
@@ -294,6 +363,9 @@
       "relevant_chunk_ids": [
         "library_interlibrary_loan_003"
       ],
+      "evidence_phrases": [
+        "first-time users will be prompted to register"
+      ],
       "expected_answer": "Register.",
       "development_topic_overlap": false
     },
@@ -305,6 +377,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "library_interlibrary_loan_004"
+      ],
+      "evidence_phrases": [
+        "Because they are generally used as course reserves at their respective institutions, these items are not eligible for loan to other libraries"
       ],
       "expected_answer": "They are generally used as course reserves at their home institutions and are not eligible for loan.",
       "development_topic_overlap": true
@@ -318,6 +393,9 @@
       "relevant_chunk_ids": [
         "library_interlibrary_loan_004"
       ],
+      "evidence_phrases": [
+        "Students can purchase or rent textbooks through the Rutgers University Bookstore"
+      ],
       "expected_answer": "The Rutgers University Bookstore.",
       "development_topic_overlap": false
     },
@@ -329,6 +407,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "it_eduroam_001"
+      ],
+      "evidence_phrases": [
+        "Visitors from member institutions can connect at Rutgers"
       ],
       "expected_answer": "Yes.",
       "development_topic_overlap": false
@@ -342,6 +423,10 @@
       "relevant_chunk_ids": [
         "it_eduroam_001"
       ],
+      "evidence_phrases": [
+        "Rutgers students, staff, and faculty",
+        "Configure your device and log in with your NetID and password"
+      ],
       "expected_answer": "Their NetID and password.",
       "development_topic_overlap": false
     },
@@ -353,6 +438,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "it_eduroam_001"
+      ],
+      "evidence_phrases": [
+        "Members of the Rutgers community can contact the Help Desk if they run into issues connecting to eduroam"
       ],
       "expected_answer": "The Help Desk.",
       "development_topic_overlap": false
@@ -366,6 +454,10 @@
       "relevant_chunk_ids": [
         "it_eduroam_001"
       ],
+      "evidence_phrases": [
+        "Visitors from participating institutions",
+        "Work with your home institution to get set up for eduroam"
+      ],
       "expected_answer": "Their home institution.",
       "development_topic_overlap": true
     },
@@ -377,6 +469,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "it_eduroam_002"
+      ],
+      "evidence_phrases": [
+        "Members of the Rutgers community can access a wireless connection through RUWireless Secure"
       ],
       "expected_answer": "RUWireless Secure.",
       "development_topic_overlap": false
@@ -390,6 +485,9 @@
       "relevant_chunk_ids": [
         "it_eduroam_002"
       ],
+      "evidence_phrases": [
+        "guests can receive access through RUWireless"
+      ],
       "expected_answer": "RUWireless.",
       "development_topic_overlap": false
     },
@@ -402,6 +500,9 @@
       "relevant_chunk_ids": [
         "it_two_step_login_001"
       ],
+      "evidence_phrases": [
+        "you will need to enter a three-digit code to confirm your identity"
+      ],
       "expected_answer": "Three.",
       "development_topic_overlap": true
     },
@@ -412,7 +513,11 @@
       "program": "MBA",
       "answerable": true,
       "relevant_chunk_ids": [
-        "it_two_step_login_001"
+        "it_two_step_login_001",
+        "it_two_step_login_002"
+      ],
+      "evidence_phrases": [
+        "Signing up for two-step login takes about five minutes"
       ],
       "expected_answer": "About five minutes.",
       "development_topic_overlap": false
@@ -426,6 +531,9 @@
       "relevant_chunk_ids": [
         "it_two_step_login_001"
       ],
+      "evidence_phrases": [
+        "The following materials are available at the knowledge base within the Rutgers IT Help portal"
+      ],
       "expected_answer": "The knowledge base within the Rutgers IT Help portal.",
       "development_topic_overlap": false
     },
@@ -437,6 +545,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "it_microsoft_office_001"
+      ],
+      "evidence_phrases": [
+        "Sign in to LinkedIn Learning for video tutorials"
       ],
       "expected_answer": "LinkedIn Learning.",
       "development_topic_overlap": false
@@ -450,6 +561,9 @@
       "relevant_chunk_ids": [
         "it_microsoft_office_001"
       ],
+      "evidence_phrases": [
+        "Publisher (PC only), and Access (PC only)"
+      ],
       "expected_answer": "Publisher and Access.",
       "development_topic_overlap": false
     },
@@ -461,6 +575,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "it_microsoft_office_001"
+      ],
+      "evidence_phrases": [
+        "including personal equipment"
       ],
       "expected_answer": "Yes.",
       "development_topic_overlap": true
@@ -475,6 +592,9 @@
         "it_microsoft_office_001",
         "it_microsoft_office_002"
       ],
+      "evidence_phrases": [
+        "Students are encouraged to use the storage component of their ScarletMail accounts, Google Drive"
+      ],
       "expected_answer": "Google Drive through their ScarletMail accounts.",
       "development_topic_overlap": false
     },
@@ -486,6 +606,9 @@
       "answerable": true,
       "relevant_chunk_ids": [
         "it_microsoft_office_002"
+      ],
+      "evidence_phrases": [
+        "active license to use Microsoft Office products while they are enrolled in or employed at Rutgers"
       ],
       "expected_answer": "While enrolled in or employed at Rutgers.",
       "development_topic_overlap": true
@@ -691,6 +814,6 @@
       "development_topic_overlap": true
     }
   ],
-  "label_corpus_sha256": "17cc2ab7aed43b10c8f70b95c9ada50701a4a2eb8c11aa50ce285f7f3e375d41",
-  "label_revision": "sentence_chunks_v1"
+  "label_corpus_sha256": "1cd77181b12e667c7ea8ead1a49b8ddcbd31c1a6de99728a00dbf9119dcf6ec0",
+  "label_revision": "block_units_v1"
 }

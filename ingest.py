@@ -1,6 +1,7 @@
 import json
-import re
 from pathlib import Path
+
+from text_units import join_units, text_units
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -10,111 +11,81 @@ OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "chunks.json"
 
 # Target chunk size, measured in words.
 # An individual sentence can exceed this size to avoid cutting it.
+# Sentences never cross line breaks; see text_units.py.
 CHUNK_SIZE = 150
 
 # Maximum overlap, using complete trailing sentences only.
 OVERLAP = 30
 
 
-def split_sentences(text: str) -> list[str]:
+def chunk_units(units: list[dict]) -> list[list[dict]]:
     """
-    Detect sentence boundaries without rewriting source wording.
+    Pack complete units (sentences within one line) into chunks.
 
-    Whitespace is normalized. Common abbreviations and initials are
-    protected, but this is a heuristic: headings and flattened lists
-    may remain attached to surrounding sentences.
-    """
-    text = re.sub(r"\s+", " ", text).strip()
-
-    if not text:
-        return []
-
-    sentences = []
-    start = 0
-
-    boundaries = re.finditer(
-        r"""[.!?]+["')\]]*(?=\s|$)""",
-        text,
-    )
-
-    for match in boundaries:
-        end = match.end()
-        prefix = text[:end]
-
-        # Avoid splitting after common abbreviations or initials.
-        if re.search(
-            r"(?:\b(?:M\.S|B\.S|Ph\.D|Dr|Mr|Mrs|Ms|Prof|"
-            r"e\.g|i\.e)|\b[A-Z])\.$",
-            prefix,
-        ):
-            continue
-
-        sentence = text[start:end].strip()
-
-        if sentence:
-            sentences.append(sentence)
-
-        start = end
-
-    remainder = text[start:].strip()
-
-    if remainder:
-        sentences.append(remainder)
-
-    return sentences
-
-
-def chunk_text(text: str) -> list[str]:
-    """
-    Pack complete sentences into chunks.
-
-    Overlap contains only complete trailing sentences whose combined
-    length fits within OVERLAP. A sentence longer than CHUNK_SIZE is
+    Overlap contains only complete trailing units whose combined
+    length fits within OVERLAP. A unit longer than CHUNK_SIZE is
     kept intact.
     """
     if not 0 <= OVERLAP < CHUNK_SIZE:
         raise ValueError("Require 0 <= OVERLAP < CHUNK_SIZE.")
 
-    sentences = split_sentences(text)
-
     chunks = []
     current = []
     current_words = 0
 
-    for sentence in sentences:
-        sentence_words = len(sentence.split())
+    def words(unit: dict) -> int:
+        return len(unit["text"].split())
 
-        if current and current_words + sentence_words > CHUNK_SIZE:
-            chunks.append(" ".join(current))
+    for unit in units:
+        unit_words = words(unit)
+
+        if current and current_words + unit_words > CHUNK_SIZE:
+            # A heading belongs with the text after it, so trailing
+            # headings are left for the next chunk.
+            closed = list(current)
+            while len(closed) > 1 and closed[-1].get("heading"):
+                closed.pop()
+
+            chunks.append(closed)
 
             overlap = []
             overlap_words = 0
 
-            # Keep a contiguous suffix of complete sentences.
-            for previous in reversed(current):
-                previous_words = len(previous.split())
+            # Keep a contiguous suffix of complete units. Headings
+            # removed above are always carried over.
+            carried = current[len(closed):]
+            carried_words = sum(words(unit) for unit in carried)
 
-                if overlap_words + previous_words > OVERLAP:
+            for previous in reversed(closed):
+                if carried_words + overlap_words + words(previous) > OVERLAP:
                     break
 
                 overlap.insert(0, previous)
-                overlap_words += previous_words
+                overlap_words += words(previous)
+
+            overlap += carried
+            overlap_words += carried_words
 
             current = overlap
             current_words = overlap_words
 
-            # Make room for the next sentence by removing overlap.
-            while current and current_words + sentence_words > CHUNK_SIZE:
+            # Make room for the next unit by removing overlap.
+            while current and current_words + unit_words > CHUNK_SIZE:
                 removed = current.pop(0)
-                current_words -= len(removed.split())
+                current_words -= words(removed)
 
-        current.append(sentence)
-        current_words += sentence_words
+        current.append(unit)
+        current_words += unit_words
 
     if current:
-        chunks.append(" ".join(current))
+        chunks.append(current)
 
     return chunks
+
+
+def chunk_text(text: str) -> list[str]:
+    """Chunk a document and return only the chunk texts."""
+    return [join_units(chunk) for chunk in chunk_units(text_units(text))]
 
 
 def main() -> None:
@@ -182,7 +153,7 @@ def main() -> None:
                 f"Document is empty: {document_path.name}"
             )
 
-        chunks = chunk_text(text)
+        chunks = chunk_units(text_units(text))
 
         metadata = {
             key: value
@@ -195,12 +166,22 @@ def main() -> None:
                 {
                     **metadata,
                     "chunk_id": f"{document_id}_{index:03d}",
-                    "text": chunk,
+                    "text": join_units(chunk),
+                    # Units let generate.py offer exact sentences with
+                    # their section heading, without re-splitting text.
+                    "units": [
+                        {
+                            "text": unit["text"],
+                            "section": unit["section"],
+                            "evidence": unit["evidence"],
+                        }
+                        for unit in chunk
+                    ],
                 }
             )
 
         oversized = sum(
-            len(chunk.split()) > CHUNK_SIZE
+            len(join_units(chunk).split()) > CHUNK_SIZE
             for chunk in chunks
         )
 

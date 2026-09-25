@@ -6,9 +6,9 @@ quote from a source document with a citation, and when the documents do
 not contain the answer, Margin says so instead of guessing.
 
 The language model never writes the answer text. It only chooses which
-sentence from the retrieved passages answers the question (or chooses
-none). Python then copies that sentence from the source and attaches the
-chunk ID, so an answer cannot contain wording that is not in a document.
+retrieved sentence answers the question (or chooses none). Python then
+copies that sentence from the source and attaches the chunk ID, so an
+answer cannot contain wording that is not in a document.
 
 ## How it works
 
@@ -19,10 +19,12 @@ flowchart LR
     E --> R[Cross-encoder rerank<br/>ms-marco MiniLM, top 3]
     R --> T{Rerank score<br/>above cutoff?}
     T -- no --> X[Decline]
-    T -- yes --> S[Split passages into<br/>numbered sentences]
-    S --> L[Local LLM via Ollama<br/>picks one sentence ID or 0]
+    T -- yes --> S[Best 8 sentences,<br/>with section headings]
+    S --> L[Local LLM via Ollama<br/>picks a sentence ID or 0<br/>and copies the answer words]
     L -- 0 --> X
-    L -- ID --> A[Python returns the exact quote<br/>+ chunk citation]
+    L -- ID --> V{Answer words in<br/>that sentence?}
+    V -- no --> X
+    V -- yes --> A[Python returns the exact quote<br/>+ chunk citation]
 ```
 
 **Preparing documents**
@@ -30,9 +32,12 @@ flowchart LR
 1. `collect.py` downloads an explicit allowlist of Rutgers pages into a
    dated staging folder with content hashes. Nothing reaches the index
    until it has been reviewed and copied to `data/raw/`.
-2. `ingest.py` splits each document into chunks of whole sentences
-   (about 150 words, with up to 30 words of whole-sentence overlap) and
-   attaches the metadata from `data/documents.json`.
+2. `ingest.py` splits each document into sentences with
+   `text_units.py` and packs them into chunks (about 150 words, with up
+   to 30 words of whole-sentence overlap). Sentences never cross a line
+   break, so web page headings and list items are not glued onto the
+   next sentence. Headings are detected and kept as context for the
+   sentences below them, but are never offered as answers.
 3. `embed.py` embeds each chunk with `all-MiniLM-L6-v2` and fails if any
    chunk is longer than the model's input limit.
 
@@ -42,28 +47,33 @@ flowchart LR
    program (university-wide documents always match), then ranks them by
    cosine similarity.
 2. `rerank.py` rescores the top 7 with a cross-encoder and keeps 3.
-3. `generate.py` offers the sentences of those passages to the model
-   with a JSON schema that only allows the offered IDs or 0 (decline).
+3. `generate.py` scores each sentence of those passages against the
+   question and offers the best 8 to the model, each with its section
+   heading. A JSON schema only allows the offered IDs or 0 (decline).
+   The model must also copy the words that state the answer; if those
+   words are not in the chosen sentence, the answer is declined.
 4. `api.py` serves `POST /ask`, `POST /search`, `GET /health`, and the
    web interface in `static/index.html`.
 
 ## Results
 
-From the latest recorded benchmark run (60 labeled questions), made
-just before the current rerank cutoff was set. Details and caveats are
-in [docs/evaluation.md](docs/evaluation.md).
+Benchmark of 60 labeled questions (40 answerable, 20 not answerable
+from the documents), `qwen2.5:3b`. Details, caveats, and a reverted
+experiment are in [docs/evaluation.md](docs/evaluation.md).
 
-| Metric | Result |
-|---|---|
-| Hit@1, embedding only → with reranking | 0.775 → **0.900** |
-| MRR@7, embedding only → with reranking | 0.877 → **0.950** |
-| Verbatim citation validity | 100% (53/53) |
-| False declines on answerable questions | 0% (0/40) |
-| Correct declines on unanswerable questions | 35% (7/20) |
-| Median latency after warm-up | 0.82 s |
+| Metric | Before | Now |
+|---|---|---|
+| Hit@1, embedding only → with reranking | 0.775 → 0.900 | 0.775 → **0.900** |
+| Correct declines on unanswerable questions | 7/20 | **14/20** |
+| False declines on answerable questions | 0/40 | **0/40** |
+| Answers quoting the right sentence | not measured | **34/40** |
+| Verbatim citation validity | 100% | **100%** |
+| Regression checks | 11/12 | **12/12** |
+| Median latency after warm-up | 0.82 s | 1.32 s |
 
-Declining unanswerable questions is the main weakness and the next
-thing to fix.
+The remaining errors are mostly sentences that point to information
+("View steps on how to...") being chosen instead of sentences that
+state it.
 
 ## Setup
 
@@ -92,6 +102,7 @@ environment variables; see `config.py` and `.env.example`.
 pytest                 # fast unit tests, no models or Ollama needed
 python evaluate.py     # 12 regression cases (needs Ollama)
 python benchmark.py    # full 60-question benchmark (needs Ollama)
+python data/evaluation/relabel.py   # recompute gold labels after re-chunking
 ```
 
 ## Project layout
@@ -99,7 +110,8 @@ python benchmark.py    # full 60-question benchmark (needs Ollama)
 ```
 config.py            shared settings
 collect.py           fetch allowlisted pages into data/staging/
-ingest.py            sentence-aware chunking
+text_units.py        sentence, heading, and section detection
+ingest.py            chunking
 embed.py             chunk embeddings
 search.py            scope filter + embedding search
 rerank.py            cross-encoder reranking
@@ -110,7 +122,7 @@ evaluate.py          regression checks
 benchmark.py         labeled benchmark
 data/documents.json  document catalog and metadata
 data/raw/            reviewed document text
-data/evaluation/     benchmark questions and labels
+data/evaluation/     benchmark questions, evidence phrases, labels
 docs/                evaluation notes
 tests/               unit tests
 ```
@@ -134,7 +146,9 @@ loan, eduroam, two-step login with Duo, and Microsoft Office. See
 
 ## Roadmap
 
-- [ ] Better declines for unanswerable questions
+- [x] Clean sentence boundaries and section context
+- [x] Better declines for unanswerable questions (7/20 → 14/20)
+- [ ] Stop choosing "pointer" sentences (links, "learn more" text)
 - [ ] Multi-sentence answers with every claim tied to a quote
 - [ ] Larger corpus of Rutgers pages
 - [ ] Postgres + pgvector storage and hybrid (BM25 + vector) search

@@ -207,6 +207,24 @@ def validate_response(result, case, canonical):
     return False, checks
 
 
+def quotes_gold_evidence(result, case):
+    """
+    True when a returned quote contains one of the case's reviewed
+    evidence phrases. A valid citation can still quote the wrong
+    sentence; this checks that it quotes the right one.
+    """
+    if not isinstance(result, dict):
+        return False
+
+    phrases = [normalize(p) for p in case.get("evidence_phrases", [])]
+
+    return any(
+        phrase in normalize(claim.get("evidence_quote", ""))
+        for claim in result.get("claims") or []
+        for phrase in phrases
+    )
+
+
 def ratio(numerator, denominator):
     return {
         "numerator": numerator,
@@ -574,6 +592,13 @@ def main():
         "verbatim_citation_validity_on_completed_responses": ratio(
             sum(checks), len(checks)
         ),
+        "supported_quotes_gold_evidence": ratio(
+            sum(
+                quotes_gold_evidence(record["result"], record["case"])
+                for record in supported
+            ),
+            len(supported),
+        ),
         "supported_answer_correctness": "PENDING_MANUAL_REVIEW",
         "successful_call_latency": latency_summary([
             record["answer_seconds"]
@@ -602,6 +627,10 @@ def main():
                 "answerable",
                 "expected_answer",
                 "answer",
+                "model_needed",
+                "model_answer_words",
+                "declined_reason",
+                "quotes_gold_evidence",
                 "error",
                 "correct",
                 "notes",
@@ -615,12 +644,21 @@ def main():
             if not isinstance(result, dict):
                 result = {}
 
+            selection = result.get("selection") or {}
+
             writer.writerow({
                 "id": case["id"],
                 "question": case["question"],
                 "answerable": case["answerable"],
                 "expected_answer": case["expected_answer"],
                 "answer": result.get("answer", ""),
+                "model_needed": selection.get("needed", ""),
+                "model_answer_words": selection.get("answer_words", ""),
+                "declined_reason": selection.get("declined_reason", ""),
+                "quotes_gold_evidence": (
+                    quotes_gold_evidence(result, case)
+                    if case["answerable"] else ""
+                ),
                 "error": record["answer_error"] or "",
                 "correct": "",
                 "notes": "",
@@ -652,7 +690,8 @@ def main():
         "limitations": [
             "Curated source-derived questions on five documents.",
             "Not an independent general-accuracy benchmark.",
-            "Gold chunk labels require review after corpus changes.",
+            "Gold chunk labels are derived from reviewed evidence phrases; "
+        "review phrase changes, not only chunk IDs.",
             "Citation validity does not establish answer relevance.",
             "Citation matching normalizes whitespace.",
             "Correctness requires manual review of complete answers.",

@@ -1,17 +1,5 @@
 import ingest
-
-
-def test_split_sentences_keeps_abbreviations_together():
-    text = "Dr. Smith supervises M.S. students. Theses need approval."
-
-    assert ingest.split_sentences(text) == [
-        "Dr. Smith supervises M.S. students.",
-        "Theses need approval.",
-    ]
-
-
-def test_split_sentences_normalizes_whitespace():
-    assert ingest.split_sentences("  One.\n\n  Two.  ") == ["One.", "Two."]
+from text_units import split_sentences, text_units
 
 
 def test_chunks_contain_only_whole_sentences(monkeypatch):
@@ -24,7 +12,7 @@ def test_chunks_contain_only_whole_sentences(monkeypatch):
     assert len(chunks) > 1
 
     for chunk in chunks:
-        for sentence in ingest.split_sentences(chunk):
+        for sentence in split_sentences(chunk):
             assert sentence in sentences
 
 
@@ -49,3 +37,29 @@ def test_long_sentence_is_kept_intact(monkeypatch):
     chunks = ingest.chunk_text(long_sentence)
 
     assert chunks == [long_sentence]
+
+
+def test_chunk_keeps_line_breaks(monkeypatch):
+    monkeypatch.setattr(ingest, "CHUNK_SIZE", 100)
+
+    text = "Title\nFirst sentence here. Second one.\nThird line."
+
+    assert ingest.chunk_text(text) == [text]
+
+
+def test_chunk_never_ends_with_a_heading(monkeypatch):
+    monkeypatch.setattr(ingest, "CHUNK_SIZE", 12)
+    monkeypatch.setattr(ingest, "OVERLAP", 0)
+
+    text = (
+        "One two three four five six seven eight.\n"
+        "Next Topic Title\n"
+        "Nine ten eleven twelve thirteen fourteen fifteen."
+    )
+
+    chunks = ingest.chunk_units(text_units(text))
+    first, second = chunks
+
+    assert first[-1]["text"] == "One two three four five six seven eight."
+    assert second[0]["text"] == "Next Topic Title"
+    assert second[0]["heading"] is True
