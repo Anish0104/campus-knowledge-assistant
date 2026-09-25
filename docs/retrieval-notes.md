@@ -1,5 +1,9 @@
 # Initial Retrieval Checks
 
+> Historical notes from the first retrieval experiment. The current
+> setup (sentence-aware chunking, cross-encoder reranking, five
+> documents) is described in the README and `docs/evaluation.md`.
+
 Model: sentence-transformers/all-MiniLM-L6-v2
 Corpus: One Rutgers MS CS requirements document, seven chunks
 Chunking: 150 words, 30-word overlap

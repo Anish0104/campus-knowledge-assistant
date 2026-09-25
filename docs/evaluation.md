@@ -1,45 +1,73 @@
-# Manual evaluation
+# Evaluation
 
-Corpus: 2 documents, 11 chunks.
-Pipeline: semantic retrieval, cross-encoder reranking,
-single-passage evidence extraction, exact quote validation.
+There are three levels of checks, from fastest to slowest.
 
-| Question | Expected source | Observed result |
+| Command | What it checks | Needs models / Ollama |
 |---|---|---|
-| Who can use Rutgers interlibrary loan? | library_interlibrary_loan_001 | Correct eligibility quote and citation |
-| Who approves my thesis? | ms_cs_requirements_006 | Correct thesis committee quote and citation |
-| Can I borrow required textbooks through interlibrary loan? | Library textbook restriction | Correct restriction; quote includes a heading fragment |
-| What time does Busch dining hall close today? | No supporting source | Correctly declined |
-| Who approves an MBA thesis at Rutgers Newark? | No supporting source | FAILED: returned MSCS New Brunswick thesis policy |
+| `pytest` | Chunking, scope filtering, answer validation, API error handling. Retrieval and Ollama are replaced by fakes. | No |
+| `python evaluate.py` | 12 hand-written regression cases with required phrases and quality warnings. | Yes |
+| `python benchmark.py` | 60 labeled questions: retrieval metrics, abstention, citation validity, latency. | Yes |
 
-Both examples passed. These are development checks, not an
-overall accuracy estimate. Campus filtering and questions requiring
-multiple passages have not been evaluated.
+## Benchmark dataset
 
-## Explicit scope filters and relevance cutoff
+`data/evaluation/benchmark_v1_1.json` (`margin_curated_v1`,
+label revision `sentence_chunks_v1`):
 
-Using campus/program request fields and a provisional rerank cutoff of 0.0:
+- 40 answerable questions, each labeled with the chunk(s) that contain
+  sufficient evidence.
+- 20 unanswerable questions whose answers are not in the collected
+  documents (for example, tuition, deadlines, dining hours).
+- Labels are tied to a SHA-256 hash of the chunk corpus. The benchmark
+  refuses to run if the corpus has changed since the labels were
+  reviewed.
 
-- Newark MBA thesis approval: correctly declined.
-- New Brunswick MSCS thesis approval: correct quote and citation.
-- Library eligibility with Newark/MBA filters: correct quote and citation.
+## Latest recorded results
 
-Limitations: scope is not automatically extracted from question text.
-The cutoff has only been checked on these development examples.
-Quote matching does not guarantee that a quote answers the question.
-## Automated development regression checks
+Run `20260925T005350447655Z` (2026-09-25, macOS arm64, Python 3.14).
 
-Run with: python evaluate.py
+This run used a working copy between commits `c41a918` and `8434484`
+with `min_rerank_score = -4.0`. The committed `generate.py` uses `0.0`,
+so these numbers need to be regenerated for the current code.
 
-Observed result: 6 passed, 0 failed, 0 errors.
+**Retrieval (40 answerable questions, 7 candidates):**
 
-Checks cover:
-- MSCS thesis approval with supporting evidence.
-- Interlibrary loan eligibility.
-- Required textbook borrowing restrictions.
-- Abstention for unsupported dining hours.
-- Abstention for unsupported Newark MBA thesis requirements.
-- University-wide library access with Newark MBA filters.
+| Ranking | Hit@1 | Hit@5 | Recall@5 | MRR@7 |
+|---|---|---|---|---|
+| Embedding only | 0.775 | 1.00 | 1.00 | 0.877 |
+| + Cross-encoder rerank | **0.900** | 1.00 | 1.00 | **0.950** |
 
-These are known development cases, not a held-out accuracy benchmark.
-The checks call Python functions directly, not HTTP or the frontend.
+**Answers (60 questions):**
+
+| Metric | Result |
+|---|---|
+| Verbatim citation validity | 53/53 (100%) |
+| False abstention on answerable questions | 0/40 (0%) |
+| Correct abstention on unanswerable questions | **7/20 (35%)** |
+| Answer errors | 0/60 |
+| Median / p95 latency (after warm-up) | 0.82 s / 1.23 s |
+
+**Main weakness:** 13 of the 20 unanswerable questions returned a quote
+instead of declining. Every quote was real, but a real quote on the
+right topic is not an answer. For example, "What is the tuition per
+credit for MS Computer Science?" returned the sentence requiring thesis
+students to register for six credits, and "What is the overdue fine per
+day for an EZBorrow book?" returned the EZBorrow loan period. Improving
+abstention is the top priority for the answer stage.
+
+## Limitations
+
+- Curated questions written from the same five documents. This is not
+  an independent measure of general accuracy.
+- Supported-answer correctness still requires manual review of
+  `review.csv` in each run folder.
+- Latency is sequential Python calls after warm-up, not HTTP latency or
+  a load test.
+- Citation validity shows a quote exists in the source; it does not
+  show that the quote answers the question.
+
+## History
+
+Early manual checks (2 documents, 11 chunks) found that the Newark MBA
+thesis question returned the New Brunswick MSCS thesis policy. Adding
+explicit campus/program filters and a rerank score cutoff fixed that
+case. These checks became the first cases in `evaluate.py`.

@@ -1,26 +1,68 @@
 import json
-from pathlib import Path
+from functools import lru_cache
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
-PROJECT_ROOT = Path(__file__).resolve().parent
-processed_dir = PROJECT_ROOT / "data" / "processed"
+from config import CHUNKS_PATH, EMBEDDING_MODEL, EMBEDDINGS_PATH
 
-records = json.loads(
-    (processed_dir / "chunks.json").read_text(
-        encoding="utf-8"
+
+@lru_cache(maxsize=1)
+def load_index() -> tuple[list[dict], np.ndarray]:
+    """Load the saved chunks and embeddings once per Python process."""
+    records = json.loads(CHUNKS_PATH.read_text(encoding="utf-8"))
+    embeddings = np.load(EMBEDDINGS_PATH)
+
+    if len(records) != len(embeddings):
+        raise ValueError(
+            f"{len(records)} chunks but {len(embeddings)} embeddings. "
+            "Rerun ingest.py and embed.py."
+        )
+
+    return records, embeddings
+
+
+@lru_cache(maxsize=1)
+def get_embedder():
+    """Load the embedding model once per Python process."""
+    # Imported here so tests and tools that never search do not
+    # need to load PyTorch.
+    from sentence_transformers import SentenceTransformer
+
+    return SentenceTransformer(EMBEDDING_MODEL, device="cpu")
+
+
+def normalize(value: str | None) -> str:
+    return " ".join((value or "").split()).casefold()
+
+
+def in_scope(
+    record: dict,
+    campus: str | None,
+    program: str | None,
+) -> bool:
+    """
+    Keep a chunk when it matches the requested campus and program.
+
+    University-wide and non-program-specific chunks match any request.
+    """
+    requested_campus = normalize(campus)
+    requested_program = normalize(program)
+
+    record_campus = normalize(record.get("campus"))
+    record_program = normalize(record.get("program"))
+
+    campus_matches = (
+        not requested_campus
+        or record_campus in {requested_campus, "university-wide"}
     )
-)
 
-embeddings = np.load(
-    processed_dir / "embeddings.npy"
-)
+    program_matches = (
+        not requested_program
+        or record_program in {requested_program, "not program-specific"}
+    )
 
-model = SentenceTransformer(
-    "sentence-transformers/all-MiniLM-L6-v2",
-    device="cpu",
-)
+    return campus_matches and program_matches
+
 
 def search(
     question: str,
@@ -37,37 +79,18 @@ def search(
     if top_k < 1:
         raise ValueError("top_k must be at least 1.")
 
-    def normalize(value: str | None) -> str:
-        return " ".join((value or "").split()).casefold()
+    records, embeddings = load_index()
 
-    requested_campus = normalize(campus)
-    requested_program = normalize(program)
-
-    eligible_indices = []
-
-    for index, record in enumerate(records):
-        record_campus = normalize(record.get("campus"))
-        record_program = normalize(record.get("program"))
-
-        campus_matches = (
-            not requested_campus
-            or record_campus == requested_campus
-            or record_campus == "university-wide"
-        )
-
-        program_matches = (
-            not requested_program
-            or record_program == requested_program
-            or record_program == "not program-specific"
-        )
-
-        if campus_matches and program_matches:
-            eligible_indices.append(index)
+    eligible_indices = [
+        index
+        for index, record in enumerate(records)
+        if in_scope(record, campus, program)
+    ]
 
     if not eligible_indices:
         return []
 
-    question_embedding = model.encode(
+    question_embedding = get_embedder().encode(
         question,
         normalize_embeddings=True,
         convert_to_numpy=True,

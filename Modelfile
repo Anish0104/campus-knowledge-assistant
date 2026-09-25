@@ -1,3 +1,10 @@
+# Optional alternative model: qwen3:4b with its "thinking" output
+# turned off, so it answers directly within the token limit.
+# The default model is qwen2.5:3b (see config.py). To try this one:
+#
+#   ollama create margin-qwen3 -f Modelfile
+#   OLLAMA_MODEL=margin-qwen3 python benchmark.py
+
 FROM qwen3:4b
 
 TEMPLATE """{{ range .Messages }}<|im_start|>{{ .Role }}

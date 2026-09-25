@@ -1,10 +1,15 @@
 import json
+import logging
 import re
 
 import httpx
 from pydantic import BaseModel, ConfigDict, Field
 
+from config import OLLAMA_MODEL, OLLAMA_TIMEOUT_SECONDS, OLLAMA_URL
 from rerank import rerank_search
+
+
+logger = logging.getLogger(__name__)
 
 
 FALLBACK_ANSWER = (
@@ -155,9 +160,9 @@ def answer_question(
     ]
 
     response = httpx.post(
-        "http://127.0.0.1:11434/api/chat",
+        f"{OLLAMA_URL}/api/chat",
         json={
-            "model": "qwen2.5:3b",
+            "model": OLLAMA_MODEL,
             "stream": False,
             "format": schema,
             "messages": [
@@ -184,14 +189,18 @@ def answer_question(
                 "num_predict": 400,
             },
         },
-        timeout=120.0,
+        timeout=OLLAMA_TIMEOUT_SECONDS,
     )
 
     response.raise_for_status()
     result = response.json()
 
-    print(f"\nStop reason: {result.get('done_reason', 'unknown')}")
-    print(f"Generated tokens: {result.get('eval_count', 'unknown')}")
+    logger.debug(
+        "Ollama finished: model=%s done_reason=%s tokens=%s",
+        OLLAMA_MODEL,
+        result.get("done_reason", "unknown"),
+        result.get("eval_count", "unknown"),
+    )
 
     if result.get("done_reason") == "length":
         raise ValueError("Model output was cut off; answer not displayed.")
@@ -236,6 +245,8 @@ def answer_question(
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
+
     try:
         question = input("Ask a question: ")
         result = answer_question(question)
@@ -253,6 +264,3 @@ if __name__ == "__main__":
             f"Ollama returned an error: "
             f"{error.response.status_code}"
         )
-
-
-

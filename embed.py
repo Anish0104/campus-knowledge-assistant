@@ -1,19 +1,15 @@
 import json
-from pathlib import Path
 
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-PROJECT_ROOT = Path(__file__).resolve().parent
-processed_dir = PROJECT_ROOT / "data" / "processed"
+from config import CHUNKS_PATH, EMBEDDING_MODEL, EMBEDDINGS_PATH
 
-chunks_path = processed_dir / "chunks.json"
-records = json.loads(chunks_path.read_text(encoding="utf-8"))
+records = json.loads(CHUNKS_PATH.read_text(encoding="utf-8"))
 
 texts = [record["text"] for record in records]
 
-model_name = "sentence-transformers/all-MiniLM-L6-v2"
-model = SentenceTransformer(model_name, device="cpu")
+model = SentenceTransformer(EMBEDDING_MODEL, device="cpu")
 
 # Check that every passage fits within the model's input limit.
 for record in records:
@@ -35,7 +31,7 @@ embeddings = model.encode(
     convert_to_numpy=True,
 )
 
-output_path = processed_dir / "embeddings.npy"
+output_path = EMBEDDINGS_PATH
 np.save(output_path, embeddings)
 
 print(f"Passages embedded: {len(texts)}")

@@ -323,6 +323,7 @@ def main():
         "search.py": ROOT / "search.py",
         "rerank.py": ROOT / "rerank.py",
         "generate.py": ROOT / "generate.py",
+        "config.py": ROOT / "config.py",
         "benchmark.py": Path(__file__).resolve(),
     }
 
@@ -333,6 +334,7 @@ def main():
 
     # Imports load the embedding model.
     # Model loading is excluded from request timings.
+    from config import OLLAMA_MODEL
     from search import search
     from rerank import get_reranker
     from generate import (
@@ -364,6 +366,7 @@ def main():
         "candidate_k": CANDIDATE_K,
         "generation_top_k": GENERATION_TOP_K,
         "min_rerank_score": MIN_RERANK_SCORE,
+        "ollama_model": OLLAMA_MODEL,
     }
 
     print("BENCHMARK SETTINGS")
