@@ -1,0 +1,16 @@
+FROM qwen3:4b
+
+TEMPLATE """{{ range .Messages }}<|im_start|>{{ .Role }}
+{{ .Content }}<|im_end|>
+{{ end }}<|im_start|>assistant
+<think>
+
+</think>
+
+"""
+
+PARAMETER temperature 0.7
+PARAMETER num_ctx 4096
+PARAMETER num_predict 400
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|im_start|>"

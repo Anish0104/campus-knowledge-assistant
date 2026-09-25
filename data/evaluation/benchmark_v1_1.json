@@ -1,0 +1,696 @@
+{
+  "name": "margin_curated_v1",
+  "labels_reviewed": true,
+  "description": "Source-derived evaluation on five documents. Not an independent or general-accuracy benchmark. Topic-overlap flags are provisional and need review.",
+  "cases": [
+    {
+      "id": "s01",
+      "question": "How many credits are required for the MS Computer Science degree?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_001"
+      ],
+      "expected_answer": "36 credits, equivalent to 12 courses.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s02",
+      "question": "How many Category A courses are explicitly required?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_001"
+      ],
+      "expected_answer": "Two Category A courses.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s03",
+      "question": "How many Category B courses are explicitly required?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_001"
+      ],
+      "expected_answer": "Two Category B courses.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s04",
+      "question": "What is the maximum number of independent study courses among the four elective courses?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_001",
+        "ms_cs_requirements_002"
+      ],
+      "expected_answer": "At most two of those four courses.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s05",
+      "question": "What minimum GPA does the MSCS document require?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_002"
+      ],
+      "expected_answer": "A minimum GPA of 3.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s06",
+      "question": "How many grades of C or lower does the MSCS document permit?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_002"
+      ],
+      "expected_answer": "No more than two.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s07",
+      "question": "What language must the essay or thesis use?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_003"
+      ],
+      "expected_answer": "English, except computer-language portions with English documentation.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s08",
+      "question": "Which sections must the MSCS essay contain?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_003"
+      ],
+      "expected_answer": "Title, authors, abstract, and references.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s09",
+      "question": "What grade must a previously submitted course paper have received to be used as the essay?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_003"
+      ],
+      "expected_answer": "B or higher.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s10",
+      "question": "What must I provide if my essay was a group assignment?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_003"
+      ],
+      "expected_answer": "Cover pages detailing my contributions, along with the project report.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s11",
+      "question": "Are presentation slides required with an essay submission?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_004"
+      ],
+      "expected_answer": "Yes, corresponding presentation slides are required.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s12",
+      "question": "Do students receive extra credit for preparing the essay?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_004"
+      ],
+      "expected_answer": "No.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s13",
+      "question": "Who must approve the MSCS essay?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_004"
+      ],
+      "expected_answer": "A Computer Science Graduate Faculty member, followed by the MS Director.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s14",
+      "question": "How many credits of 198:704-706 must a thesis student register for?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_004"
+      ],
+      "expected_answer": "Exactly six credits.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s15",
+      "question": "Who makes up the thesis committee?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_006"
+      ],
+      "expected_answer": "The thesis supervisor and two other faculty members selected in consultation with the supervisor.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s16",
+      "question": "How should a student choose a thesis topic?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "ms_cs_requirements_005",
+        "ms_cs_requirements_006"
+      ],
+      "expected_answer": "By mutual agreement with the faculty supervisor.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s17",
+      "question": "How will I know when an interlibrary loan item is ready?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_001"
+      ],
+      "expected_answer": "An email will notify me when it is ready for pickup or download.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s18",
+      "question": "How are requested articles and book chapters delivered?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_001",
+        "library_interlibrary_loan_002"
+      ],
+      "expected_answer": "Electronically.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s19",
+      "question": "What should I do to see request options for an unavailable QuickSearch item?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_001",
+        "library_interlibrary_loan_002"
+      ],
+      "expected_answer": "Sign in.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s20",
+      "question": "Where can I receive requested materials other than articles and book chapters?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_002"
+      ],
+      "expected_answer": "At a Rutgers library of my choice or at home.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s21",
+      "question": "What is the usual EZBorrow turnaround time?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_002",
+        "library_interlibrary_loan_003"
+      ],
+      "expected_answer": "Usually three to five business days.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s22",
+      "question": "How long is the EZBorrow loan period?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_002",
+        "library_interlibrary_loan_003"
+      ],
+      "expected_answer": "12 weeks.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s23",
+      "question": "Which service should I try after QuickSearch and EZBorrow cannot find an item?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_003"
+      ],
+      "expected_answer": "ILLiad.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s24",
+      "question": "What are first-time ILLiad users prompted to do?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_003"
+      ],
+      "expected_answer": "Register.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s25",
+      "question": "Why are required textbooks unavailable through interlibrary loan?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_004"
+      ],
+      "expected_answer": "They are generally used as course reserves at their home institutions and are not eligible for loan.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s26",
+      "question": "Where does the library page suggest students purchase or rent textbooks?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "library_interlibrary_loan_004"
+      ],
+      "expected_answer": "The Rutgers University Bookstore.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s27",
+      "question": "Can visitors from eduroam member institutions connect at Rutgers?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_eduroam_001"
+      ],
+      "expected_answer": "Yes.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s28",
+      "question": "What credentials should Rutgers users use when configuring eduroam?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_eduroam_001"
+      ],
+      "expected_answer": "Their NetID and password.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s29",
+      "question": "Who should Rutgers community members contact for eduroam connection problems?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_eduroam_001"
+      ],
+      "expected_answer": "The Help Desk.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s30",
+      "question": "Who should visiting students work with to set up eduroam?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_eduroam_001"
+      ],
+      "expected_answer": "Their home institution.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s31",
+      "question": "Which wireless service is identified for Rutgers community members on campus?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_eduroam_002"
+      ],
+      "expected_answer": "RUWireless Secure.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s32",
+      "question": "Which wireless service is identified for guests?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_eduroam_002"
+      ],
+      "expected_answer": "RUWireless.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s33",
+      "question": "How many digits are in the Duo identity confirmation code described on the page?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_two_step_login_001"
+      ],
+      "expected_answer": "Three.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s34",
+      "question": "Approximately how long does signing up for two-step login take?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_two_step_login_001"
+      ],
+      "expected_answer": "About five minutes.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s35",
+      "question": "Where are the two-step login help materials available?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_two_step_login_001"
+      ],
+      "expected_answer": "The knowledge base within the Rutgers IT Help portal.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s36",
+      "question": "Where can I find Office video tutorials?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_microsoft_office_001"
+      ],
+      "expected_answer": "LinkedIn Learning.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s37",
+      "question": "Which listed Office applications are marked PC only?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_microsoft_office_001"
+      ],
+      "expected_answer": "Publisher and Access.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s38",
+      "question": "Can the Office installation allowance include personal equipment?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_microsoft_office_001"
+      ],
+      "expected_answer": "Yes.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "s39",
+      "question": "Which storage service does the collected Office page recommend to students?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_microsoft_office_001",
+        "it_microsoft_office_002"
+      ],
+      "expected_answer": "Google Drive through their ScarletMail accounts.",
+      "development_topic_overlap": false
+    },
+    {
+      "id": "s40",
+      "question": "While what status does the Office license remain active?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": true,
+      "relevant_chunk_ids": [
+        "it_microsoft_office_002"
+      ],
+      "expected_answer": "While enrolled in or employed at Rutgers.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u01",
+      "question": "What is the exact graduation application deadline for spring 2027?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The collected document does not provide that date.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u02",
+      "question": "What is the tuition per credit for MS Computer Science?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Tuition is not provided.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u03",
+      "question": "What is the minimum GRE score for admission to MS Computer Science?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Admission test requirements are not provided.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u04",
+      "question": "What is the maximum number of online courses I can take in MSCS?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The source refers to other policies but does not give this limit.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u05",
+      "question": "What is the deadline for submitting my MSCS essay this semester?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "No specific essay submission deadline is supplied.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u06",
+      "question": "Which professor is available to supervise my thesis this semester?",
+      "campus": "New Brunswick",
+      "program": "MS Computer Science",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Faculty availability is not supplied.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u07",
+      "question": "How many credits are required for an MBA at Rutgers Newark?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The MSCS credit policy does not establish MBA requirements.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u08",
+      "question": "What GPA is required to graduate from the Newark MBA program?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "No MBA graduation policy is collected.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u09",
+      "question": "Who approves a history master's thesis at Rutgers Camden?",
+      "campus": "Camden",
+      "program": "MA History",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "No history thesis policy is collected.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u10",
+      "question": "What essay sections are required for an MBA at Rutgers Newark?",
+      "campus": "Newark",
+      "program": "MBA",
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The MSCS essay format does not establish MBA requirements.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u11",
+      "question": "What is the overdue fine per day for an EZBorrow book?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "No overdue fine amount is supplied.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u12",
+      "question": "How many times can I renew an EZBorrow loan?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Renewal limits are not supplied.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u13",
+      "question": "How much does home delivery of an interlibrary loan book cost?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Home delivery is mentioned, but its price is not supplied.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u14",
+      "question": "Can I request an interlibrary loan if I am an alumnus with no other Rutgers affiliation?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The source does not explicitly establish alumni eligibility or ineligibility.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u15",
+      "question": "What exact WiFi settings should I enter to configure eduroam on Windows 11?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The collected page does not contain the detailed configuration steps.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u16",
+      "question": "What download speed does Rutgers guarantee on eduroam?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "No guaranteed speed is supplied.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u17",
+      "question": "What are the exact steps to transfer Duo to a replacement phone?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "A device guide is mentioned, but its procedural contents are not collected.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u18",
+      "question": "How do I generate a Duo bypass code while traveling abroad?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Travel and bypass help are mentioned without the procedure.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u19",
+      "question": "Which minimum iOS version is required by Duo Mobile?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "The page suggests checking compatibility but gives no minimum version.",
+      "development_topic_overlap": true
+    },
+    {
+      "id": "u20",
+      "question": "How many gigabytes of Google Drive storage does my Rutgers account include?",
+      "campus": null,
+      "program": null,
+      "answerable": false,
+      "relevant_chunk_ids": [],
+      "expected_answer": "Google Drive is mentioned, but no storage quota is supplied.",
+      "development_topic_overlap": true
+    }
+  ],
+  "label_corpus_sha256": "17cc2ab7aed43b10c8f70b95c9ada50701a4a2eb8c11aa50ce285f7f3e375d41",
+  "label_revision": "sentence_chunks_v1"
+}

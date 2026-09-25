@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 
@@ -7,25 +8,111 @@ CATALOG_PATH = PROJECT_ROOT / "data" / "documents.json"
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "chunks.json"
 
+# Target chunk size, measured in words.
+# An individual sentence can exceed this size to avoid cutting it.
 CHUNK_SIZE = 150
+
+# Maximum overlap, using complete trailing sentences only.
 OVERLAP = 30
 
 
+def split_sentences(text: str) -> list[str]:
+    """
+    Detect sentence boundaries without rewriting source wording.
+
+    Whitespace is normalized. Common abbreviations and initials are
+    protected, but this is a heuristic: headings and flattened lists
+    may remain attached to surrounding sentences.
+    """
+    text = re.sub(r"\s+", " ", text).strip()
+
+    if not text:
+        return []
+
+    sentences = []
+    start = 0
+
+    boundaries = re.finditer(
+        r"""[.!?]+["')\]]*(?=\s|$)""",
+        text,
+    )
+
+    for match in boundaries:
+        end = match.end()
+        prefix = text[:end]
+
+        # Avoid splitting after common abbreviations or initials.
+        if re.search(
+            r"(?:\b(?:M\.S|B\.S|Ph\.D|Dr|Mr|Mrs|Ms|Prof|"
+            r"e\.g|i\.e)|\b[A-Z])\.$",
+            prefix,
+        ):
+            continue
+
+        sentence = text[start:end].strip()
+
+        if sentence:
+            sentences.append(sentence)
+
+        start = end
+
+    remainder = text[start:].strip()
+
+    if remainder:
+        sentences.append(remainder)
+
+    return sentences
+
+
 def chunk_text(text: str) -> list[str]:
-    """Create overlapping word windows."""
+    """
+    Pack complete sentences into chunks.
+
+    Overlap contains only complete trailing sentences whose combined
+    length fits within OVERLAP. A sentence longer than CHUNK_SIZE is
+    kept intact.
+    """
     if not 0 <= OVERLAP < CHUNK_SIZE:
         raise ValueError("Require 0 <= OVERLAP < CHUNK_SIZE.")
 
-    words = text.split()
-    step = CHUNK_SIZE - OVERLAP
+    sentences = split_sentences(text)
+
     chunks = []
+    current = []
+    current_words = 0
 
-    for start in range(0, len(words), step):
-        end = start + CHUNK_SIZE
-        chunks.append(" ".join(words[start:end]))
+    for sentence in sentences:
+        sentence_words = len(sentence.split())
 
-        if end >= len(words):
-            break
+        if current and current_words + sentence_words > CHUNK_SIZE:
+            chunks.append(" ".join(current))
+
+            overlap = []
+            overlap_words = 0
+
+            # Keep a contiguous suffix of complete sentences.
+            for previous in reversed(current):
+                previous_words = len(previous.split())
+
+                if overlap_words + previous_words > OVERLAP:
+                    break
+
+                overlap.insert(0, previous)
+                overlap_words += previous_words
+
+            current = overlap
+            current_words = overlap_words
+
+            # Make room for the next sentence by removing overlap.
+            while current and current_words + sentence_words > CHUNK_SIZE:
+                removed = current.pop(0)
+                current_words -= len(removed.split())
+
+        current.append(sentence)
+        current_words += sentence_words
+
+    if current:
+        chunks.append(" ".join(current))
 
     return chunks
 
@@ -36,7 +123,9 @@ def main() -> None:
     )
 
     if not isinstance(documents, list) or not documents:
-        raise ValueError("The document catalog must be a non-empty list.")
+        raise ValueError(
+            "The document catalog must be a non-empty list."
+        )
 
     records = []
     seen_ids = set()
@@ -52,6 +141,11 @@ def main() -> None:
     }
 
     for document in documents:
+        if not isinstance(document, dict):
+            raise ValueError(
+                "Each document catalog entry must be an object."
+            )
+
         missing = required_fields - document.keys()
 
         if missing:
@@ -62,18 +156,31 @@ def main() -> None:
         document_id = document["document_id"]
 
         if not isinstance(document_id, str) or not document_id.strip():
-            raise ValueError("Each document needs a non-empty document_id.")
+            raise ValueError(
+                "Each document needs a non-empty document_id."
+            )
 
         if document_id in seen_ids:
-            raise ValueError(f"Duplicate document_id: {document_id}")
+            raise ValueError(
+                f"Duplicate document_id: {document_id}"
+            )
 
         seen_ids.add(document_id)
 
-        document_path = RAW_DIR / document["filename"]
+        filename = document["filename"]
+
+        if not isinstance(filename, str) or not filename.strip():
+            raise ValueError(
+                f"Document {document_id} needs a non-empty filename."
+            )
+
+        document_path = RAW_DIR / filename
         text = document_path.read_text(encoding="utf-8")
 
         if not text.strip():
-            raise ValueError(f"Document is empty: {document_path.name}")
+            raise ValueError(
+                f"Document is empty: {document_path.name}"
+            )
 
         chunks = chunk_text(text)
 
@@ -92,20 +199,41 @@ def main() -> None:
                 }
             )
 
+        oversized = sum(
+            len(chunk.split()) > CHUNK_SIZE
+            for chunk in chunks
+        )
+
         print(
             f"{document_id}: "
             f"{len(text.split())} words -> {len(chunks)} chunks"
         )
 
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        if oversized:
+            print(
+                f"  {oversized} chunk(s) exceed the "
+                f"{CHUNK_SIZE}-word target to preserve whole sentences."
+            )
+
+    OUTPUT_PATH.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     OUTPUT_PATH.write_text(
-        json.dumps(records, indent=2, ensure_ascii=False),
+        json.dumps(
+            records,
+            indent=2,
+            ensure_ascii=False,
+        ) + "\n",
         encoding="utf-8",
     )
 
     print(f"\nDocuments processed: {len(documents)}")
     print(f"Total chunks: {len(records)}")
-    print(f"Saved to: {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
+    print(
+        f"Saved to: {OUTPUT_PATH.relative_to(PROJECT_ROOT)}"
+    )
 
 
 if __name__ == "__main__":
