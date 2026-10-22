@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 import httpx
 from pydantic import BaseModel, ConfigDict, Field
@@ -10,29 +11,19 @@ from rerank import get_reranker, rerank_search
 
 logger = logging.getLogger(__name__)
 
-
 FALLBACK_ANSWER = (
     "I don't have enough information in the collected documents."
 )
 
-# Passages whose best cross-encoder score is below this are dropped.
-# Every answerable benchmark question's best passage scored above -3.7;
-# see docs/evaluation.md before changing it.
 MIN_RERANK_SCORE = -5.0
 GENERATION_TOP_K = 3
 CANDIDATE_K = 7
-
-# At most this many sentences are offered to the model, chosen by a
-# sentence-level cross-encoder score. A smaller list is easier for a
-# small model to judge.
 MAX_EVIDENCE_OPTIONS = 8
 
 
 class EvidenceSelection(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    # Field order matters: the model writes "needed" first, which
-    # makes it state what fact it is looking for before choosing.
     needed: str = Field(
         max_length=200,
         description="The specific fact the question asks for.",
@@ -113,7 +104,7 @@ def words_in_quote(answer_words: str, quote: str) -> bool:
 
 
 def public_source(passage: dict) -> dict:
-    """A passage as returned to callers, without internal unit data."""
+    """Return source metadata without internal sentence-unit data."""
     return {
         key: value
         for key, value in passage.items()
@@ -121,14 +112,34 @@ def public_source(passage: dict) -> dict:
     }
 
 
-def evidence_options(question: str, passages: list[dict]) -> list[dict]:
+def is_pointer_sentence(text: str) -> bool:
     """
-    Collect answerable sentences from the passages, best first.
+    Identify obvious sentences that direct readers elsewhere.
 
-    Headings, questions, and short fragments are excluded when chunks
-    are built (see text_units.py). A sentence repeated in overlapping
-    chunks is offered once, from the higher-ranked passage.
+    This is a narrow heuristic, not a general answer-quality judge.
     """
+    cleaned = " ".join(text.split()).casefold()
+    cleaned = re.sub(r"^note\s+\d+\s*:\s*", "", cleaned)
+
+    pointer_starts = (
+        "view steps on how to ",
+        "find out how to ",
+        "learn more about ",
+        "learn more at ",
+        "learn more by ",
+        "refer to ",
+    )
+
+    if cleaned.startswith(pointer_starts):
+        return True
+
+    return cleaned.rstrip(".:") == (
+        "instructions for installing and connecting to eduroam"
+    )
+
+
+def evidence_options(question: str, passages: list[dict]) -> list[dict]:
+    """Filter and rank candidate evidence sentences."""
     options = []
     seen = set()
 
@@ -136,7 +147,11 @@ def evidence_options(question: str, passages: list[dict]) -> list[dict]:
         for unit in passage.get("units", []):
             key = (passage["document_id"], unit["text"])
 
-            if not unit["evidence"] or key in seen:
+            if (
+                not unit["evidence"]
+                or key in seen
+                or is_pointer_sentence(unit["text"])
+            ):
                 continue
 
             seen.add(key)
@@ -174,6 +189,7 @@ def answer_question(
     program: str | None = None,
 ) -> dict:
     question = question.strip()
+
     if not question:
         raise ValueError("Question cannot be blank.")
 
@@ -217,66 +233,89 @@ def answer_question(
         })
 
     schema = EvidenceSelection.model_json_schema()
-
-    # Restrict the response to IDs actually offered, plus abstention.
     schema["properties"]["evidence_id"]["enum"] = [
         0,
         *candidates.keys(),
     ]
 
+    payload = {
+        "model": OLLAMA_MODEL,
+        "stream": False,
+        "format": schema,
+        "messages": [
+            {
+                "role": "system",
+                "content": SYSTEM_PROMPT,
+            },
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {
+                        "question": question,
+                        "requested_campus": campus,
+                        "requested_program": program,
+                        "evidence_options": offered,
+                    },
+                    ensure_ascii=False,
+                ),
+            },
+        ],
+        "options": {
+            "temperature": 0,
+            "num_ctx": 4096,
+            "num_predict": 400,
+        },
+    }
+
+    # Qwen3 supports switching thinking off.
+    # This belongs at the request's top level, not inside "options".
+    # Leave the existing Qwen2.5 request unchanged.
+    model_family = (
+        OLLAMA_MODEL.rsplit("/", 1)[-1].split(":", 1)[0].casefold()
+    )
+    if model_family == "qwen3":
+        payload["think"] = False
+
     response = httpx.post(
         f"{OLLAMA_URL}/api/chat",
-        json={
-            "model": OLLAMA_MODEL,
-            "stream": False,
-            "format": schema,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": SYSTEM_PROMPT,
-                },
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        {
-                            "question": question,
-                            "requested_campus": campus,
-                            "requested_program": program,
-                            "evidence_options": offered,
-                        },
-                        ensure_ascii=False,
-                    ),
-                },
-            ],
-            "options": {
-                "temperature": 0,
-                "num_ctx": 4096,
-                "num_predict": 400,
-            },
-        },
+        json=payload,
         timeout=OLLAMA_TIMEOUT_SECONDS,
     )
 
     response.raise_for_status()
     result = response.json()
 
+    message = result.get("message")
+    thinking_present = (
+        isinstance(message, dict)
+        and bool(message.get("thinking"))
+    )
+
+    # Log metadata only, not the model's reasoning text.
     logger.debug(
-        "Ollama finished: model=%s done_reason=%s tokens=%s",
+        "Ollama finished: model=%s done_reason=%s tokens=%s "
+        "thinking_present=%s",
         OLLAMA_MODEL,
         result.get("done_reason", "unknown"),
         result.get("eval_count", "unknown"),
+        thinking_present,
     )
 
     if result.get("done_reason") == "length":
-        raise ValueError("Model output was cut off; answer not displayed.")
+        raise ValueError(
+            "Model output was cut off; answer not displayed. "
+            f"Model={OLLAMA_MODEL}, "
+            f"thinking_present={thinking_present}, "
+            f"output_tokens={result.get('eval_count', 'unknown')}."
+        )
 
-    message = result.get("message")
     if not isinstance(message, dict):
         raise ValueError("Ollama returned no message.")
 
     content = message.get("content")
-    if not isinstance(content, str):
-        raise ValueError("Ollama returned no text content.")
+
+    if not isinstance(content, str) or not content.strip():
+        raise ValueError("Ollama returned no answer text.")
 
     selection = EvidenceSelection.model_validate_json(content)
     decision = selection.model_dump()
@@ -285,11 +324,11 @@ def answer_question(
         return fallback(question, decision)
 
     selected = candidates.get(selection.evidence_id)
+
     if selected is None:
         raise ValueError("Model selected an unknown evidence ID.")
 
-    # Python supplies both fields from the selected source.
-    # The model never writes the quote or the source ID.
+    # Python supplies the quote and source ID from the chosen evidence.
     quote = selected["unit"]["text"]
     passage = selected["passage"]
     source_id = passage["chunk_id"]
@@ -297,8 +336,6 @@ def answer_question(
     if quote not in passage["text"]:
         raise ValueError("Internal evidence mapping failed.")
 
-    # The model must show which words state the answer. Words that are
-    # not in the chosen sentence mean the choice is not supported.
     answer_words = selection.answer_words.strip()
 
     if not words_in_quote(answer_words, quote):
