@@ -1,0 +1,1041 @@
+[
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_001",
+    "text": "Program Course Requirements:\nMSCS Students require 36 credits (12 courses) in total, and they must meet the following requirements:\n- Two from Category A\n- Two from Category B\n- Four additional courses from Category A OR Category B (M.S. Category A, and M.S. Category B). Note: Two of these additional courses must be from Category A OR Category B; the other two additional courses may be used for Essay Option (Category A or Category B) OR Thesis Option (704, 705, 706; 601, 602)\n- Four from the list of courses acceptable for MSCS credit: approved courses from other departments, additional Category A or B courses, CS Seminars, acceptable undergraduate courses, OR independent study. Note 1: at most two of the four courses may be independent study. Note 2: refer to the SGS and Global Policies below for online courses.",
+    "units": [
+      {
+        "text": "Program Course Requirements:",
+        "section": "Program Course Requirements:",
+        "evidence": false
+      },
+      {
+        "text": "MSCS Students require 36 credits (12 courses) in total, and they must meet the following requirements:",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "- Two from Category A",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "- Two from Category B",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "- Four additional courses from Category A OR Category B (M.S. Category A, and M.S. Category B).",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Note: Two of these additional courses must be from Category A OR Category B; the other two additional courses may be used for Essay Option (Category A or Category B) OR Thesis Option (704, 705, 706; 601, 602)",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "- Four from the list of courses acceptable for MSCS credit: approved courses from other departments, additional Category A or B courses, CS Seminars, acceptable undergraduate courses, OR independent study.",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Note 1: at most two of the four courses may be independent study.",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Note 2: refer to the SGS and Global Policies below for online courses.",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_002",
+    "text": "Note 1: at most two of the four courses may be independent study. Note 2: refer to the SGS and Global Policies below for online courses. Note 3: non-MSCS course registration requires office (email) approval based on extraordinary circumstances.\n- Essay Option (A report from project-based MSCS courses or work approved as an essay) OR Thesis Option [equivalent to 2 courses (6 credits)]. Note: courses supporting the Essay or Thesis Options may also satisfy above requirements/conditions under \"Four additional courses\"\nGraduation Requirements:\nStudents need to maintain a minimum of 3 GPA..\nStudent need to have no more than 2 Cs or lower.\nSchool of Graduate Studies Policies\nRutgers Global Policies\nEssay/Thesis Requirements:\nIn addition to the coursework requirements for the M.S. degree that are established by the School of Graduate Studies, the student must choose either the Essay Option or Thesis Option as described below.",
+    "units": [
+      {
+        "text": "Note 1: at most two of the four courses may be independent study.",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Note 2: refer to the SGS and Global Policies below for online courses.",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Note 3: non-MSCS course registration requires office (email) approval based on extraordinary circumstances.",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "- Essay Option (A report from project-based MSCS courses or work approved as an essay) OR Thesis Option [equivalent to 2 courses (6 credits)].",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Note: courses supporting the Essay or Thesis Options may also satisfy above requirements/conditions under \"Four additional courses\"",
+        "section": "Program Course Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Graduation Requirements:",
+        "section": "Graduation Requirements:",
+        "evidence": false
+      },
+      {
+        "text": "Students need to maintain a minimum of 3 GPA..",
+        "section": "Graduation Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Student need to have no more than 2 Cs or lower.",
+        "section": "Graduation Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "School of Graduate Studies Policies",
+        "section": "School of Graduate Studies Policies",
+        "evidence": false
+      },
+      {
+        "text": "Rutgers Global Policies",
+        "section": "Rutgers Global Policies",
+        "evidence": false
+      },
+      {
+        "text": "Essay/Thesis Requirements:",
+        "section": "Essay/Thesis Requirements:",
+        "evidence": false
+      },
+      {
+        "text": "In addition to the coursework requirements for the M.S. degree that are established by the School of Graduate Studies, the student must choose either the Essay Option or Thesis Option as described below.",
+        "section": "Essay/Thesis Requirements:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_003",
+    "text": "The essay or thesis must be written in English (except that some portion may require a computer language, with English documentation), it must be the student's own work, and it must demonstrate the student's facility for expository writing.\nEssay Option:\nThe student must write and submit an expository paper in a field of computer science that was covered in the student's course work. It may be a paper written as part of a course in computer science, or it may be based on such a course. The essay \"must\" be appropriately formatted and contain: Title, Author(s), Abstract, and References. A paper that has previously been submitted for a course must have received a grade of B or higher. If the essay you're planning on submitting is a group assignment, you'll need to provide cover page(s) detailing your contributions to the project along with the rest of the project report.",
+    "units": [
+      {
+        "text": "The essay or thesis must be written in English (except that some portion may require a computer language, with English documentation), it must be the student's own work, and it must demonstrate the student's facility for expository writing.",
+        "section": "Essay/Thesis Requirements:",
+        "evidence": true
+      },
+      {
+        "text": "Essay Option:",
+        "section": "Essay Option:",
+        "evidence": false
+      },
+      {
+        "text": "The student must write and submit an expository paper in a field of computer science that was covered in the student's course work.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "It may be a paper written as part of a course in computer science, or it may be based on such a course.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "The essay \"must\" be appropriately formatted and contain: Title, Author(s), Abstract, and References.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "A paper that has previously been submitted for a course must have received a grade of B or higher.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "If the essay you're planning on submitting is a group assignment, you'll need to provide cover page(s) detailing your contributions to the project along with the rest of the project report.",
+        "section": "Essay Option:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_004",
+    "text": "Corresponding presentation slides are required with all essay submissions. When relevant, a video and documentation or user's manual are recommended but not required. No extra credit is given for the preparation of the essay. The essay must be approved by a member of the Graduate Faculty of the Department of Computer Science followed by the M.S. Director.\nThesis Option:\nThe student must write a Master's Thesis and must register for exactly six credits of 198:704-706. Upon initial registration, the student is required to provide the MS Director with written confirmation from the faculty member agreeing to supervise their thesis.\nThe Master's Thesis must be a written account of a critical and scholarly investigation in an area of computer science.",
+    "units": [
+      {
+        "text": "Corresponding presentation slides are required with all essay submissions.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "When relevant, a video and documentation or user's manual are recommended but not required.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "No extra credit is given for the preparation of the essay.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "The essay must be approved by a member of the Graduate Faculty of the Department of Computer Science followed by the M.S. Director.",
+        "section": "Essay Option:",
+        "evidence": true
+      },
+      {
+        "text": "Thesis Option:",
+        "section": "Thesis Option:",
+        "evidence": false
+      },
+      {
+        "text": "The student must write a Master's Thesis and must register for exactly six credits of 198:704-706.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "Upon initial registration, the student is required to provide the MS Director with written confirmation from the faculty member agreeing to supervise their thesis.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The Master's Thesis must be a written account of a critical and scholarly investigation in an area of computer science.",
+        "section": "Thesis Option:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_005",
+    "text": "The Master's Thesis must be a written account of a critical and scholarly investigation in an area of computer science. It may represent: (a) a piece of independent research (extensions and improvements of work in a given part of the field are acceptable at a level of novelty which is less than that required for a doctoral thesis); (b) a work of synthesis that gives new significance and insight to previously-known results; or (c) an important constructive contribution to the development of a computer application. The thesis may not be a digest of known results from the literature, a summary of a published report, company classified or government classified material, or dependent for its background on other non-available reports. The thesis topic should be chosen by mutual agreement between the student and their faculty supervisor. The thesis must be approved by the student's thesis committee.",
+    "units": [
+      {
+        "text": "The Master's Thesis must be a written account of a critical and scholarly investigation in an area of computer science.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "It may represent: (a) a piece of independent research (extensions and improvements of work in a given part of the field are acceptable at a level of novelty which is less than that required for a doctoral thesis); (b) a work of synthesis that gives new significance and insight to previously-known results; or (c) an important constructive contribution to the development of a computer application.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The thesis may not be a digest of known results from the literature, a summary of a published report, company classified or government classified material, or dependent for its background on other non-available reports.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The thesis topic should be chosen by mutual agreement between the student and their faculty supervisor.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The thesis must be approved by the student's thesis committee.",
+        "section": "Thesis Option:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_006",
+    "text": "The thesis topic should be chosen by mutual agreement between the student and their faculty supervisor. The thesis must be approved by the student's thesis committee. The committee consists of the thesis supervisor and two other faculty members who are determined in consultation with the thesis supervisor. The advisor and members of the thesis committee must be members of the Graduate Faculty in Computer Science.\nIn addition to submitting a copy of the completed Master's Thesis to the MS Director, the student is required to follow all thesis formatting, content, and submission guidelines from the School of Graduate Studies.\nDegree Completion Processing:\n[IMPORTANT: ALL INFORMATION AND INSTRUCTIONS FOR GRADUATION FORMS/MATERIALS ARE PROVIDED IN THE APPROPRIATE CANVAS MODULES FOR MSCS] There are several forms that must be filled out and submitted by the appropriate deadlines in order for the student who has fulfilled the above requirements to receive a Master's Degree.",
+    "units": [
+      {
+        "text": "The thesis topic should be chosen by mutual agreement between the student and their faculty supervisor.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The thesis must be approved by the student's thesis committee.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The committee consists of the thesis supervisor and two other faculty members who are determined in consultation with the thesis supervisor.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "The advisor and members of the thesis committee must be members of the Graduate Faculty in Computer Science.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "In addition to submitting a copy of the completed Master's Thesis to the MS Director, the student is required to follow all thesis formatting, content, and submission guidelines from the School of Graduate Studies.",
+        "section": "Thesis Option:",
+        "evidence": true
+      },
+      {
+        "text": "Degree Completion Processing:",
+        "section": "Degree Completion Processing:",
+        "evidence": false
+      },
+      {
+        "text": "[IMPORTANT: ALL INFORMATION AND INSTRUCTIONS FOR GRADUATION FORMS/MATERIALS ARE PROVIDED IN THE APPROPRIATE CANVAS MODULES FOR MSCS] There are several forms that must be filled out and submitted by the appropriate deadlines in order for the student who has fulfilled the above requirements to receive a Master's Degree.",
+        "section": "Degree Completion Processing:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "ms_cs_requirements",
+    "source_url": "https://www.cs.rutgers.edu/academics/graduate/m-s-program/degree-requirements",
+    "campus": "New Brunswick",
+    "program": "MS Computer Science",
+    "topic": "Degree requirements",
+    "effective_year": null,
+    "chunk_id": "ms_cs_requirements_007",
+    "text": "It is the student's responsibility that all necessary paperwork be completed on time. Information and forms can be obtained from the M.S. Administrative Assistant",
+    "units": [
+      {
+        "text": "It is the student's responsibility that all necessary paperwork be completed on time.",
+        "section": "Degree Completion Processing:",
+        "evidence": true
+      },
+      {
+        "text": "Information and forms can be obtained from the M.S. Administrative Assistant",
+        "section": "Degree Completion Processing:",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "library_interlibrary_loan",
+    "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Interlibrary loan",
+    "effective_year": null,
+    "chunk_id": "library_interlibrary_loan_001",
+    "text": "Interlibrary loan\nBorrow from other libraries\nNeed to request print or electronic materials that aren't available at Rutgers? You can use interlibrary loan (ILL).\nAfter you place your request, you'll receive an email when your item is ready for pickup or available to download. Learn more about how to request a library item for pick up. Turnaround time and lending policies vary by institution.\nInterlibrary loan is available to current Rutgers students, faculty, and staff; faculty emeriti; retirees; visiting scholars and students; RBHS volunteer faculty; and Rowan and CCC affiliates.\nNot sure how to get started? Follow this guide for step-by-step instructions.\nStart with QuickSearch\nThe quickest way to have an item delivered to you is to find it in QuickSearch. If an item in QuickSearch is unavailable, sign in to view your request options. Articles and book chapters are delivered electronically.",
+    "units": [
+      {
+        "text": "Interlibrary loan",
+        "section": "Interlibrary loan",
+        "evidence": false
+      },
+      {
+        "text": "Borrow from other libraries",
+        "section": "Borrow from other libraries",
+        "evidence": false
+      },
+      {
+        "text": "Need to request print or electronic materials that aren't available at Rutgers?",
+        "section": "Borrow from other libraries",
+        "evidence": false
+      },
+      {
+        "text": "You can use interlibrary loan (ILL).",
+        "section": "Borrow from other libraries",
+        "evidence": true
+      },
+      {
+        "text": "After you place your request, you'll receive an email when your item is ready for pickup or available to download.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Learn more about how to request a library item for pick up.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Turnaround time and lending policies vary by institution.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Interlibrary loan is available to current Rutgers students, faculty, and staff; faculty emeriti; retirees; visiting scholars and students; RBHS volunteer faculty; and Rowan and CCC affiliates.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Not sure how to get started?",
+        "section": null,
+        "evidence": false
+      },
+      {
+        "text": "Follow this guide for step-by-step instructions.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Start with QuickSearch",
+        "section": "Start with QuickSearch",
+        "evidence": false
+      },
+      {
+        "text": "The quickest way to have an item delivered to you is to find it in QuickSearch.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "If an item in QuickSearch is unavailable, sign in to view your request options.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "Articles and book chapters are delivered electronically.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "library_interlibrary_loan",
+    "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Interlibrary loan",
+    "effective_year": null,
+    "chunk_id": "library_interlibrary_loan_002",
+    "text": "If an item in QuickSearch is unavailable, sign in to view your request options. Articles and book chapters are delivered electronically. All other materials can be picked up at your Rutgers library of choice or delivered to your home. View steps on how to borrow request a scan of articles or book chapters on Request a Scan or Digital Copy.\nSign in to QuickSearch\nNot there? Try one of these options...\nSearch via EZBorrow\nFor the fastest turnaround times from our nearby lending partners.\nEZBorrow is the shared catalog of PALCI, a large network of regional academic and large public libraries. Turnaround time is fast (usually 3-5 business days) and the loan period is 12 weeks. Books requested through this service are typically available quickly due to geographic location.",
+    "units": [
+      {
+        "text": "If an item in QuickSearch is unavailable, sign in to view your request options.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "Articles and book chapters are delivered electronically.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "All other materials can be picked up at your Rutgers library of choice or delivered to your home.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "View steps on how to borrow request a scan of articles or book chapters on Request a Scan or Digital Copy.",
+        "section": "Start with QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "Sign in to QuickSearch",
+        "section": "Sign in to QuickSearch",
+        "evidence": false
+      },
+      {
+        "text": "Not there?",
+        "section": "Sign in to QuickSearch",
+        "evidence": false
+      },
+      {
+        "text": "Try one of these options...",
+        "section": "Sign in to QuickSearch",
+        "evidence": true
+      },
+      {
+        "text": "Search via EZBorrow",
+        "section": "Search via EZBorrow",
+        "evidence": false
+      },
+      {
+        "text": "For the fastest turnaround times from our nearby lending partners.",
+        "section": "Search via EZBorrow",
+        "evidence": true
+      },
+      {
+        "text": "EZBorrow is the shared catalog of PALCI, a large network of regional academic and large public libraries.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Turnaround time is fast (usually 3-5 business days) and the loan period is 12 weeks.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Books requested through this service are typically available quickly due to geographic location.",
+        "section": null,
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "library_interlibrary_loan",
+    "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Interlibrary loan",
+    "effective_year": null,
+    "chunk_id": "library_interlibrary_loan_003",
+    "text": "Turnaround time is fast (usually 3-5 business days) and the loan period is 12 weeks. Books requested through this service are typically available quickly due to geographic location. You may be prompted to sign in at point of request if you have not signed in prior to view all your request options.\nSearch EZBorrow\nRequest via ILLiad\nA worldwide search for the hardest-to-locate items.\nIf the item you desire was not found in QuickSearch or EZBorrow, place your request via ILLiad for access to the collections of our consortial and worldwide partner libraries. Lenders who provide the quickest delivery and longest loan periods are prioritized.\nLog into your ILLiad account to place and track requests (first-time users will be prompted to register.)\nLog in to ILLiad with your NetID\nLog in to ILLiad with a Barcode",
+    "units": [
+      {
+        "text": "Turnaround time is fast (usually 3-5 business days) and the loan period is 12 weeks.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Books requested through this service are typically available quickly due to geographic location.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "You may be prompted to sign in at point of request if you have not signed in prior to view all your request options.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Search EZBorrow",
+        "section": "Search EZBorrow",
+        "evidence": false
+      },
+      {
+        "text": "Request via ILLiad",
+        "section": "Request via ILLiad",
+        "evidence": false
+      },
+      {
+        "text": "A worldwide search for the hardest-to-locate items.",
+        "section": "Request via ILLiad",
+        "evidence": true
+      },
+      {
+        "text": "If the item you desire was not found in QuickSearch or EZBorrow, place your request via ILLiad for access to the collections of our consortial and worldwide partner libraries.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Lenders who provide the quickest delivery and longest loan periods are prioritized.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Log into your ILLiad account to place and track requests (first-time users will be prompted to register.)",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Log in to ILLiad with your NetID",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Log in to ILLiad with a Barcode",
+        "section": null,
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "library_interlibrary_loan",
+    "source_url": "https://www.libraries.rutgers.edu/find-borrow/interlibrary-loan-borrow-other-libraries",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Interlibrary loan",
+    "effective_year": null,
+    "chunk_id": "library_interlibrary_loan_004",
+    "text": "Log in to ILLiad with your NetID\nLog in to ILLiad with a Barcode\nLooking for Textbooks?\nUnfortunately, we can't facilitate interlibrary loan requests for textbooks or other required course materials. Because they are generally used as course reserves at their respective institutions, these items are not eligible for loan to other libraries.\nStudents can purchase or rent textbooks through the Rutgers University Bookstore, while instructors can request that items be put on reserve or added to reading lists for their students. Instructors are also encouraged to work with the Libraries through our subject specialist librarians or Open and Affordable Textbooks Program to identify free or low-cost alternatives to their traditional course materials.",
+    "units": [
+      {
+        "text": "Log in to ILLiad with your NetID",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Log in to ILLiad with a Barcode",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Looking for Textbooks?",
+        "section": "Looking for Textbooks?",
+        "evidence": false
+      },
+      {
+        "text": "Unfortunately, we can't facilitate interlibrary loan requests for textbooks or other required course materials.",
+        "section": "Looking for Textbooks?",
+        "evidence": true
+      },
+      {
+        "text": "Because they are generally used as course reserves at their respective institutions, these items are not eligible for loan to other libraries.",
+        "section": "Looking for Textbooks?",
+        "evidence": true
+      },
+      {
+        "text": "Students can purchase or rent textbooks through the Rutgers University Bookstore, while instructors can request that items be put on reserve or added to reading lists for their students.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Instructors are also encouraged to work with the Libraries through our subject specialist librarians or Open and Affordable Textbooks Program to identify free or low-cost alternatives to their traditional course materials.",
+        "section": null,
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "it_eduroam",
+    "source_url": "https://it.rutgers.edu/eduroam/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "eduroam wireless access",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:50.802978+00:00",
+    "title": "eduroam",
+    "content_sha256": "d7d4508302bfd081fdac9d41d5919745b2e24e32852b39f7d550d7712fd10d51",
+    "word_count": 152,
+    "extraction_selector": "main",
+    "chunk_id": "it_eduroam_001",
+    "text": "eduroam\neduroam is a free and secure wireless network available to the Rutgers community when visiting participating universities.\nWhy use eduroam?\nConnect to free WiFi at member universities in more than 100 countries\nInstall on your device and log in with your NetID\nSecurity exceeds typical commercial hotspots\nVisitors from member institutions can connect at Rutgers\nInstructions for installing and connecting to eduroam\nRutgers students, staff, and faculty\nConfigure your device and log in with your NetID and password.\nVisitors from participating institutions\nWork with your home institution to get set up for eduroam.\nHelp & Support\nGet help\nMembers of the Rutgers community can contact the Help Desk if they run into issues connecting to eduroam. ( NOTE : Visitors should contact IT staff at their home institution.)",
+    "units": [
+      {
+        "text": "eduroam",
+        "section": "eduroam",
+        "evidence": false
+      },
+      {
+        "text": "eduroam is a free and secure wireless network available to the Rutgers community when visiting participating universities.",
+        "section": "eduroam",
+        "evidence": true
+      },
+      {
+        "text": "Why use eduroam?",
+        "section": "Why use eduroam?",
+        "evidence": false
+      },
+      {
+        "text": "Connect to free WiFi at member universities in more than 100 countries",
+        "section": "Why use eduroam?",
+        "evidence": true
+      },
+      {
+        "text": "Install on your device and log in with your NetID",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Security exceeds typical commercial hotspots",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Visitors from member institutions can connect at Rutgers",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Instructions for installing and connecting to eduroam",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Rutgers students, staff, and faculty",
+        "section": "Rutgers students, staff, and faculty",
+        "evidence": false
+      },
+      {
+        "text": "Configure your device and log in with your NetID and password.",
+        "section": "Rutgers students, staff, and faculty",
+        "evidence": true
+      },
+      {
+        "text": "Visitors from participating institutions",
+        "section": "Visitors from participating institutions",
+        "evidence": false
+      },
+      {
+        "text": "Work with your home institution to get set up for eduroam.",
+        "section": "Visitors from participating institutions",
+        "evidence": true
+      },
+      {
+        "text": "Help & Support",
+        "section": "Help & Support",
+        "evidence": false
+      },
+      {
+        "text": "Get help",
+        "section": "Get help",
+        "evidence": false
+      },
+      {
+        "text": "Members of the Rutgers community can contact the Help Desk if they run into issues connecting to eduroam.",
+        "section": "Get help",
+        "evidence": true
+      },
+      {
+        "text": "( NOTE : Visitors should contact IT staff at their home institution.)",
+        "section": "Get help",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "it_eduroam",
+    "source_url": "https://it.rutgers.edu/eduroam/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "eduroam wireless access",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:50.802978+00:00",
+    "title": "eduroam",
+    "content_sha256": "d7d4508302bfd081fdac9d41d5919745b2e24e32852b39f7d550d7712fd10d51",
+    "word_count": 152,
+    "extraction_selector": "main",
+    "chunk_id": "it_eduroam_002",
+    "text": "( NOTE : Visitors should contact IT staff at their home institution.)\nLooking for RUWireless?\nMembers of the Rutgers community can access a wireless connection through RUWireless Secure while guests can receive access through RUWireless.",
+    "units": [
+      {
+        "text": "( NOTE : Visitors should contact IT staff at their home institution.)",
+        "section": "Get help",
+        "evidence": true
+      },
+      {
+        "text": "Looking for RUWireless?",
+        "section": "Looking for RUWireless?",
+        "evidence": false
+      },
+      {
+        "text": "Members of the Rutgers community can access a wireless connection through RUWireless Secure while guests can receive access through RUWireless.",
+        "section": "Looking for RUWireless?",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "it_two_step_login",
+    "source_url": "https://it.rutgers.edu/two-step-login/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Two-step login with Duo",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:51.861316+00:00",
+    "title": "Two-step login",
+    "content_sha256": "6d127e9e2776c685d4945a34335222f2bb4b4cfccc888d06a623d10d30f56624",
+    "word_count": 214,
+    "extraction_selector": "main",
+    "chunk_id": "it_two_step_login_001",
+    "text": "Two-step login\nTwo-step login with Duo, also known as two-factor authentication, helps protect your account by adding an extra layer of security beyond your NetID and password. With two-step login, you will need to enter a three-digit code to confirm your identity in order to gain access to many online resources at the university.\nEnroll now Update iOS or Android for Duo\nHelp with two-step login with Duo\nThe following materials are available at the knowledge base within the Rutgers IT Help portal.\nTwo-step login FAQ\nDo you have questions about Duo and two-step login? We’ve got answers.\nOverview of two-step login\nLearn about the basics of two-step login with Duo, including the benefits of enrolling.\nEnrollment guide\nSigning up for two-step login takes about five minutes. Here’s how.\nUsing Duo in exam rooms\nHow to use Duo in places that forbid mobile phones, such as exam rooms.",
+    "units": [
+      {
+        "text": "Two-step login",
+        "section": "Two-step login",
+        "evidence": false
+      },
+      {
+        "text": "Two-step login with Duo, also known as two-factor authentication, helps protect your account by adding an extra layer of security beyond your NetID and password.",
+        "section": "Two-step login",
+        "evidence": true
+      },
+      {
+        "text": "With two-step login, you will need to enter a three-digit code to confirm your identity in order to gain access to many online resources at the university.",
+        "section": "Two-step login",
+        "evidence": true
+      },
+      {
+        "text": "Enroll now Update iOS or Android for Duo",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Help with two-step login with Duo",
+        "section": "Help with two-step login with Duo",
+        "evidence": false
+      },
+      {
+        "text": "The following materials are available at the knowledge base within the Rutgers IT Help portal.",
+        "section": "Help with two-step login with Duo",
+        "evidence": true
+      },
+      {
+        "text": "Two-step login FAQ",
+        "section": "Two-step login FAQ",
+        "evidence": false
+      },
+      {
+        "text": "Do you have questions about Duo and two-step login?",
+        "section": "Two-step login FAQ",
+        "evidence": false
+      },
+      {
+        "text": "We’ve got answers.",
+        "section": "Two-step login FAQ",
+        "evidence": false
+      },
+      {
+        "text": "Overview of two-step login",
+        "section": "Overview of two-step login",
+        "evidence": false
+      },
+      {
+        "text": "Learn about the basics of two-step login with Duo, including the benefits of enrolling.",
+        "section": "Overview of two-step login",
+        "evidence": true
+      },
+      {
+        "text": "Enrollment guide",
+        "section": "Enrollment guide",
+        "evidence": false
+      },
+      {
+        "text": "Signing up for two-step login takes about five minutes.",
+        "section": "Enrollment guide",
+        "evidence": true
+      },
+      {
+        "text": "Here’s how.",
+        "section": "Enrollment guide",
+        "evidence": false
+      },
+      {
+        "text": "Using Duo in exam rooms",
+        "section": "Using Duo in exam rooms",
+        "evidence": false
+      },
+      {
+        "text": "How to use Duo in places that forbid mobile phones, such as exam rooms.",
+        "section": "Using Duo in exam rooms",
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "it_two_step_login",
+    "source_url": "https://it.rutgers.edu/two-step-login/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Two-step login with Duo",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:51.861316+00:00",
+    "title": "Two-step login",
+    "content_sha256": "6d127e9e2776c685d4945a34335222f2bb4b4cfccc888d06a623d10d30f56624",
+    "word_count": 214,
+    "extraction_selector": "main",
+    "chunk_id": "it_two_step_login_002",
+    "text": "Signing up for two-step login takes about five minutes. Here’s how.\nUsing Duo in exam rooms\nHow to use Duo in places that forbid mobile phones, such as exam rooms.\nAdding, removing or changing devices\nFind out how to add a new device or remove an old device in Duo.\nGetting help with Duo\nWondering about international travel, bypass codes, or other issues? Get answers and assistance.\nCheck whether your iOS or Android software works with Duo.\nVideos to learn about Duo\nIntroduction to Duo security\nGetting started with Duo security\nWhat is two-factor authentication? (2FA)",
+    "units": [
+      {
+        "text": "Signing up for two-step login takes about five minutes.",
+        "section": "Enrollment guide",
+        "evidence": true
+      },
+      {
+        "text": "Here’s how.",
+        "section": "Enrollment guide",
+        "evidence": false
+      },
+      {
+        "text": "Using Duo in exam rooms",
+        "section": "Using Duo in exam rooms",
+        "evidence": false
+      },
+      {
+        "text": "How to use Duo in places that forbid mobile phones, such as exam rooms.",
+        "section": "Using Duo in exam rooms",
+        "evidence": true
+      },
+      {
+        "text": "Adding, removing or changing devices",
+        "section": "Adding, removing or changing devices",
+        "evidence": false
+      },
+      {
+        "text": "Find out how to add a new device or remove an old device in Duo.",
+        "section": "Adding, removing or changing devices",
+        "evidence": true
+      },
+      {
+        "text": "Getting help with Duo",
+        "section": "Getting help with Duo",
+        "evidence": false
+      },
+      {
+        "text": "Wondering about international travel, bypass codes, or other issues?",
+        "section": "Getting help with Duo",
+        "evidence": false
+      },
+      {
+        "text": "Get answers and assistance.",
+        "section": "Getting help with Duo",
+        "evidence": true
+      },
+      {
+        "text": "Check whether your iOS or Android software works with Duo.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Videos to learn about Duo",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Introduction to Duo security",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Getting started with Duo security",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "What is two-factor authentication?",
+        "section": null,
+        "evidence": false
+      },
+      {
+        "text": "(2FA)",
+        "section": null,
+        "evidence": false
+      }
+    ]
+  },
+  {
+    "document_id": "it_microsoft_office",
+    "source_url": "https://it.rutgers.edu/microsoft-office/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Microsoft Office access",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:52.902732+00:00",
+    "title": "Microsoft Office",
+    "content_sha256": "1323625dab22f410a0dba57acac0e3a63602ea24f4dbf894710a3572bea3d057",
+    "word_count": 192,
+    "extraction_selector": "main",
+    "chunk_id": "it_microsoft_office_001",
+    "text": "Microsoft Office\nSuite of Microsoft products available for free to Rutgers students, faculty, and staff.\nOffice for faculty/staff\nDetails on free Microsoft Office for faculty and staff, including installation instructions.\nOffice for students\nInstallation instructions and other details on free Microsoft Office for Rutgers students.\nOffice video tutorials\nSign in to LinkedIn Learning for video tutorials about Excel, PowerPoint, and other Office programs.\nRutgers provides free access to various Microsoft Office products for all current faculty, staff, and students. Faculty, staff, and students can install Microsoft Word, Excel, PowerPoint, OneNote, Publisher (PC only), and Access (PC only) on up to five computers, five tablets, and five phones, including personal equipment.\nPlease note Microsoft OneDrive is only available for faculty and staff. Students are encouraged to use the storage component of their ScarletMail accounts, Google Drive, for storage space.",
+    "units": [
+      {
+        "text": "Microsoft Office",
+        "section": "Microsoft Office",
+        "evidence": false
+      },
+      {
+        "text": "Suite of Microsoft products available for free to Rutgers students, faculty, and staff.",
+        "section": "Microsoft Office",
+        "evidence": true
+      },
+      {
+        "text": "Office for faculty/staff",
+        "section": "Office for faculty/staff",
+        "evidence": false
+      },
+      {
+        "text": "Details on free Microsoft Office for faculty and staff, including installation instructions.",
+        "section": "Office for faculty/staff",
+        "evidence": true
+      },
+      {
+        "text": "Office for students",
+        "section": "Office for students",
+        "evidence": false
+      },
+      {
+        "text": "Installation instructions and other details on free Microsoft Office for Rutgers students.",
+        "section": "Office for students",
+        "evidence": true
+      },
+      {
+        "text": "Office video tutorials",
+        "section": "Office video tutorials",
+        "evidence": false
+      },
+      {
+        "text": "Sign in to LinkedIn Learning for video tutorials about Excel, PowerPoint, and other Office programs.",
+        "section": "Office video tutorials",
+        "evidence": true
+      },
+      {
+        "text": "Rutgers provides free access to various Microsoft Office products for all current faculty, staff, and students.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Faculty, staff, and students can install Microsoft Word, Excel, PowerPoint, OneNote, Publisher (PC only), and Access (PC only) on up to five computers, five tablets, and five phones, including personal equipment.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Please note Microsoft OneDrive is only available for faculty and staff.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Students are encouraged to use the storage component of their ScarletMail accounts, Google Drive, for storage space.",
+        "section": null,
+        "evidence": true
+      }
+    ]
+  },
+  {
+    "document_id": "it_microsoft_office",
+    "source_url": "https://it.rutgers.edu/microsoft-office/",
+    "campus": "University-wide",
+    "program": "Not program-specific",
+    "topic": "Microsoft Office access",
+    "effective_year": null,
+    "collected_at": "2026-09-21T04:07:52.902732+00:00",
+    "title": "Microsoft Office",
+    "content_sha256": "1323625dab22f410a0dba57acac0e3a63602ea24f4dbf894710a3572bea3d057",
+    "word_count": 192,
+    "extraction_selector": "main",
+    "chunk_id": "it_microsoft_office_002",
+    "text": "Please note Microsoft OneDrive is only available for faculty and staff. Students are encouraged to use the storage component of their ScarletMail accounts, Google Drive, for storage space.\nFaculty, staff, and students will have an active license to use Microsoft Office products while they are enrolled in or employed at Rutgers. Once they depart the university, the license will expire and they will have 30 days before the Office applications go into a read-only mode with limited functionality.\nLearn about Office applications",
+    "units": [
+      {
+        "text": "Please note Microsoft OneDrive is only available for faculty and staff.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Students are encouraged to use the storage component of their ScarletMail accounts, Google Drive, for storage space.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Faculty, staff, and students will have an active license to use Microsoft Office products while they are enrolled in or employed at Rutgers.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Once they depart the university, the license will expire and they will have 30 days before the Office applications go into a read-only mode with limited functionality.",
+        "section": null,
+        "evidence": true
+      },
+      {
+        "text": "Learn about Office applications",
+        "section": null,
+        "evidence": true
+      }
+    ]
+  }
+]
