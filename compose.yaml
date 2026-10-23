@@ -1,0 +1,23 @@
+services:
+  margin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "127.0.0.1:8000:8000"
+
+    environment:
+      OLLAMA_URL: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "qwen2.5:3b"
+      OLLAMA_TIMEOUT_SECONDS: "120"
+      HF_HOME: "/app/.cache/huggingface"
+
+    volumes:
+      - huggingface-cache:/app/.cache/huggingface
+
+    init: true
+
+volumes:
+  huggingface-cache:
+
