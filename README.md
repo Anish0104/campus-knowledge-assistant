@@ -144,6 +144,37 @@ loan, eduroam, two-step login with Duo, and Microsoft Office. See
 - Quotes are verified to exist in the source, not to answer the
   question.
 
+
+## Evaluation
+
+Single-answer baseline using local Qwen2.5 3B on a curated,
+source-derived set of 60 questions: 40 answerable and 20 unsupported.
+
+| Metric | Result |
+|---|---:|
+| Reviewed supported-answer correctness | 37/40 (92.5%) |
+| Unsupported questions correctly declined | 16/20 (80%) |
+| Overall reviewed correctness | 53/60 (88.3%) |
+| Retrieval Hit@1: embeddings → reranking | 77.5% → 90% |
+| Verbatim citation validity | 44/44 (100%) |
+| Median / p95 Python-call latency | 1.35s / 1.74s |
+| Unit tests | 66 passing |
+
+Baseline run: `20261023T090539656364Z`.
+
+Correctness was assessed against the supplied expected answers with
+AI-assisted review labels. This small development benchmark is not an
+independent measure of general accuracy. Verbatim citation validity
+does not establish answer relevance or completeness. Latencies are
+sequential local Python-call timings, not HTTP load-test results.
+
+Single-answer mode is the default. Optional multi-evidence mode can
+return up to three source sentences; the baseline above evaluates
+single-answer mode.
+
+Known limitations include selecting related but non-answering quotes
+and failing to decline some unsupported questions.
+
 ## Roadmap
 
 - [x] Clean sentence boundaries and section context
