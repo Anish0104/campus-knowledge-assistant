@@ -1,10 +1,12 @@
+import os
+
 import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
-from config import OLLAMA_MODEL, PROJECT_ROOT
+from config import GROQ_MODEL, LLM_PROVIDER, OLLAMA_MODEL, PROJECT_ROOT
 from generate import answer_question
 from search import search
 
@@ -27,8 +29,19 @@ def homepage():
 
 @app.get("/health")
 def health() -> dict:
-    """Report that the API is up. Does not check Ollama."""
-    return {"status": "ok", "ollama_model": OLLAMA_MODEL}
+    """Report that the API is up. Does not perform inference checks."""
+    provider = os.getenv("LLM_PROVIDER", LLM_PROVIDER).strip().lower()
+    model = (
+        os.getenv("GROQ_MODEL", GROQ_MODEL)
+        if provider == "groq"
+        else os.getenv("OLLAMA_MODEL", OLLAMA_MODEL)
+    )
+    return {
+        "status": "ok",
+        "provider": provider,
+        "model": model,
+        "ollama_model": OLLAMA_MODEL,
+    }
 
 
 class AskRequest(BaseModel):
@@ -98,16 +111,29 @@ def ask_documents(request: AskRequest) -> dict:
     except httpx.RequestError as error:
         raise HTTPException(
             status_code=503,
-            detail="Could not reach Ollama. Check that it is running.",
+            detail="Could not reach the configured model provider. Check that it is available.",
         ) from error
 
     except httpx.HTTPStatusError as error:
+        status = error.response.status_code
+        if status in (401, 403):
+            detail = "Model provider authentication failed. Check your API credentials."
+        elif status == 429:
+            detail = "Model provider rate limit exceeded. Please try again later."
+        else:
+            detail = f"Model provider returned an error ({status})."
         raise HTTPException(
             status_code=502,
-            detail="Ollama returned an error.",
+            detail=detail,
         ) from error
 
     except ValueError as error:
+        msg = str(error)
+        if "GROQ_API_KEY is not configured" in msg or "LLM_PROVIDER" in msg:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Configuration error: {msg}",
+            ) from error
         raise HTTPException(
             status_code=502,
             detail="The generated response failed validation.",

@@ -1,8 +1,16 @@
 import json
+import os
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
 
+from config import (
+    GROQ_MODEL,
+    GROQ_REQUEST_DELAY_SECONDS,
+    LLM_PROVIDER,
+    OLLAMA_MODEL,
+)
 from generate import answer_question
 
 
@@ -364,13 +372,31 @@ def check_quality(case: dict, result: dict) -> list[str]:
 
 
 def main() -> int:
+    active_provider = os.getenv("LLM_PROVIDER", LLM_PROVIDER).strip().lower()
+    active_model = (
+        os.getenv("GROQ_MODEL", GROQ_MODEL)
+        if active_provider == "groq"
+        else os.getenv("OLLAMA_MODEL", OLLAMA_MODEL)
+    )
+
     print(f"Running {len(CASES)} development regression checks.")
-    print("Ollama must be running. FastAPI does not need to be running.")
+    print(f"Provider: {active_provider} | Model: {active_model}")
+    if active_provider == "ollama":
+        print("Ollama must be running. FastAPI does not need to be running.")
+    elif active_provider == "groq":
+        print("GROQ_API_KEY must be configured. FastAPI does not need to be running.")
     print("Quality warnings are reported separately from failures.\n")
+
+    delay = float(
+        os.getenv("GROQ_REQUEST_DELAY_SECONDS", str(GROQ_REQUEST_DELAY_SECONDS))
+    )
 
     records = []
 
-    for case in CASES:
+    for index, case in enumerate(CASES):
+        if index > 0 and active_provider == "groq":
+            time.sleep(delay)
+
         print(f"Checking: {case['id']}", flush=True)
         started = perf_counter()
 
@@ -453,6 +479,8 @@ def main() -> int:
     report = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "suite": "development_regression_v2",
+        "provider": active_provider,
+        "model": active_model,
         "summary": {
             "total": len(records),
             "passed": passed,

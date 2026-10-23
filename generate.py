@@ -6,7 +6,14 @@ import re
 import httpx
 from pydantic import BaseModel, ConfigDict, Field
 
-from config import OLLAMA_MODEL, OLLAMA_TIMEOUT_SECONDS, OLLAMA_URL
+from config import (
+    GROQ_MODEL,
+    LLM_PROVIDER,
+    OLLAMA_MODEL,
+    OLLAMA_TIMEOUT_SECONDS,
+    OLLAMA_URL,
+)
+from providers import get_provider
 from rerank import get_reranker, rerank_search
 
 
@@ -358,15 +365,9 @@ def answer_question(
     if answer_mode not in {"single", "multi"}:
         raise ValueError("answer_mode must be 'single' or 'multi'.")
 
-    provider = os.getenv("LLM_PROVIDER", "ollama").strip().lower()
-    if provider not in {"ollama", "groq"}:
-        raise ValueError("LLM_PROVIDER must be 'ollama' or 'groq'.")
-
-    api_key = ""
-    if provider == "groq":
-        api_key = os.getenv("GROQ_API_KEY", "").strip()
-        if not api_key:
-            raise ValueError("GROQ_API_KEY is not configured.")
+    provider = get_provider()
+    if provider.name == "groq" and not provider.api_key:
+        raise ValueError("GROQ_API_KEY is not configured.")
 
     passages = rerank_search(
         question,
@@ -434,130 +435,12 @@ def answer_question(
         ensure_ascii=False,
     )
 
-    if provider == "groq":
-        model = os.getenv(
-            "GROQ_MODEL",
-            "llama-3.3-70b-versatile",
-        ).strip()
-
-        if not model:
-            raise ValueError("GROQ_MODEL cannot be blank.")
-
-        payload = {
-            "model": model,
-            "stream": False,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": (
-                        system_prompt
-                        + "\nReturn a JSON object matching this schema:\n"
-                        + json.dumps(schema)
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": user_content,
-                },
-            ],
-            "response_format": {"type": "json_object"},
-            "temperature": 0,
-            "max_completion_tokens": 800 if multi else 400,
-        }
-
-        response = httpx.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-            },
-            json=payload,
-            timeout=OLLAMA_TIMEOUT_SECONDS,
-        )
-        response.raise_for_status()
-        result = response.json()
-
-        choices = result.get("choices")
-        if not isinstance(choices, list) or not choices:
-            raise ValueError("Groq returned no choices.")
-
-        choice = choices[0]
-        if not isinstance(choice, dict):
-            raise ValueError("Groq returned an invalid choice.")
-
-        finish_reason = choice.get("finish_reason")
-
-        logger.debug(
-            "Groq finished: model=%s mode=%s finish_reason=%s",
-            model,
-            answer_mode,
-            finish_reason,
-        )
-
-        if finish_reason != "stop":
-            raise ValueError(
-                "Groq response did not complete normally; "
-                "answer not displayed."
-            )
-
-        message = choice.get("message")
-
-    else:
-        payload = {
-            "model": OLLAMA_MODEL,
-            "stream": False,
-            "format": schema,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": system_prompt,
-                },
-                {
-                    "role": "user",
-                    "content": user_content,
-                },
-            ],
-            "options": {
-                "temperature": 0,
-                "num_ctx": 4096,
-                "num_predict": 800 if multi else 400,
-            },
-        }
-
-        model_family = (
-            OLLAMA_MODEL.rsplit("/", 1)[-1].split(":", 1)[0].casefold()
-        )
-        if model_family == "qwen3":
-            payload["think"] = False
-
-        response = httpx.post(
-            f"{OLLAMA_URL}/api/chat",
-            json=payload,
-            timeout=OLLAMA_TIMEOUT_SECONDS,
-        )
-        response.raise_for_status()
-        result = response.json()
-
-        logger.debug(
-            "Ollama finished: model=%s mode=%s done_reason=%s tokens=%s",
-            OLLAMA_MODEL,
-            answer_mode,
-            result.get("done_reason", "unknown"),
-            result.get("eval_count", "unknown"),
-        )
-
-        if result.get("done_reason") == "length":
-            raise ValueError(
-                "Model output was cut off; answer not displayed."
-            )
-
-        message = result.get("message")
-
-    if not isinstance(message, dict):
-        raise ValueError("Model returned no message.")
-
-    content = message.get("content")
-    if not isinstance(content, str) or not content.strip():
-        raise ValueError("Model returned no answer text.")
+    content = provider.generate_evidence_selection(
+        system_prompt=system_prompt,
+        user_content=user_content,
+        schema=schema,
+        multi=multi,
+    )
 
     parsed = response_model.model_validate_json(content)
 

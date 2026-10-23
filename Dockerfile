@@ -21,7 +21,7 @@ RUN useradd --create-home --uid 10001 margin \
     && chown -R margin:margin /app
 
 COPY --chown=margin:margin \
-    api.py config.py generate.py search.py rerank.py text_units.py ./
+    api.py config.py generate.py providers.py search.py rerank.py text_units.py ./
 
 COPY --chown=margin:margin static/ ./static/
 COPY --chown=margin:margin data/processed/chunks.json ./data/processed/chunks.json

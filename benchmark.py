@@ -3,11 +3,13 @@ import csv
 import hashlib
 import json
 import math
+import os
 import platform
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean, median
+import time
 from time import perf_counter
 
 
@@ -602,7 +604,12 @@ def run_benchmark():
         name: digest(path) for name, path in tracked_paths.items()
     }
 
-    from config import OLLAMA_MODEL
+    from config import (
+        GROQ_MODEL,
+        GROQ_REQUEST_DELAY_SECONDS,
+        LLM_PROVIDER,
+        OLLAMA_MODEL,
+    )
     from search import search
     from rerank import get_reranker
     from generate import (
@@ -622,10 +629,19 @@ def run_benchmark():
     if FALLBACK_ANSWER != EXPECTED_FALLBACK:
         raise ValueError("Generation and benchmark fallbacks differ.")
 
+    active_provider = os.getenv("LLM_PROVIDER", LLM_PROVIDER).strip().lower()
+    active_model = (
+        os.getenv("GROQ_MODEL", GROQ_MODEL)
+        if active_provider == "groq"
+        else os.getenv("OLLAMA_MODEL", OLLAMA_MODEL)
+    )
+
     settings = {
         "candidate_k": CANDIDATE_K,
         "generation_top_k": GENERATION_TOP_K,
         "min_rerank_score": MIN_RERANK_SCORE,
+        "provider": active_provider,
+        "model": active_model,
         "ollama_model": OLLAMA_MODEL,
         "max_claims": MAX_CLAIMS,
     }
@@ -646,11 +662,18 @@ def run_benchmark():
         perf_counter() - warmup_started, 4
     )
 
+    delay = float(
+        os.getenv("GROQ_REQUEST_DELAY_SECONDS", str(GROQ_REQUEST_DELAY_SECONDS))
+    )
+
     run_dir = new_run_dir()
     print(f"\nRun folder: {run_dir}")
     records = []
 
-    for case in cases:
+    for index, case in enumerate(cases):
+        if index > 0 and active_provider == "groq":
+            time.sleep(delay)
+
         print(
             f"\nChecking {case['id']}: {case['question']}",
             flush=True,
