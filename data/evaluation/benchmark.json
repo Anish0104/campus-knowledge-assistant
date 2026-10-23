@@ -13,7 +13,7 @@
         "ms_cs_requirements_001"
       ],
       "expected_answer": "36 credits, equivalent to 12 courses.",
-      "development_topic_overlap": true
+      "development_topic_overlap": false
     },
     {
       "id": "s02",

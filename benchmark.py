@@ -1,3 +1,4 @@
+import argparse
 import csv
 import hashlib
 import json
@@ -20,8 +21,9 @@ EXPECTED_FALLBACK = (
     "I don't have enough information in the collected documents."
 )
 
-# Keep retrieval evaluation fixed at seven candidates.
 CANDIDATE_K = 7
+MAX_CLAIMS = 3
+VALIDATOR_VERSION = "multi_claim_v1"
 
 
 def normalize(text):
@@ -33,16 +35,13 @@ def digest(path):
 
 
 def corpus_digest(chunks):
-    """Match the canonical JSON hash used during label review."""
     serialized = json.dumps(
         chunks,
         sort_keys=True,
         ensure_ascii=False,
         separators=(",", ":"),
     )
-    return hashlib.sha256(
-        serialized.encode("utf-8")
-    ).hexdigest()
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
 def git_output(*args):
@@ -62,12 +61,8 @@ def eligible(source, case):
         ("campus", "university-wide"),
         ("program", "not program-specific"),
     ):
-        requested = normalize(
-            case.get(field) or ""
-        ).casefold()
-        actual = normalize(
-            source.get(field) or ""
-        ).casefold()
+        requested = normalize(case.get(field) or "").casefold()
+        actual = normalize(source.get(field) or "").casefold()
 
         if requested and actual not in {requested, wildcard}:
             return False
@@ -77,14 +72,9 @@ def eligible(source, case):
 
 def ranking_metrics(ids, gold):
     first = next(
-        (
-            rank
-            for rank, item in enumerate(ids, 1)
-            if item in gold
-        ),
+        (rank for rank, item in enumerate(ids, 1) if item in gold),
         None,
     )
-
     return {
         "hit_at_1": int(bool(set(ids[:1]) & gold)),
         "hit_at_5": int(bool(set(ids[:5]) & gold)),
@@ -94,6 +84,7 @@ def ranking_metrics(ids, gold):
 
 
 def validate_response(result, case, canonical):
+    """Validate response structure and check each source quotation."""
     if not isinstance(result, dict):
         raise ValueError("Response must be an object.")
 
@@ -110,21 +101,14 @@ def validate_response(result, case, canonical):
     if result.get("question") != case["question"]:
         raise ValueError("Returned question differs from input.")
 
-    if len(claims) > 1:
-        raise ValueError(
-            "Application contract permits at most one claim."
-        )
-
     if answer.strip() == EXPECTED_FALLBACK:
         if claims or sources:
-            raise ValueError(
-                "Abstention contains claims or sources."
-            )
+            raise ValueError("Abstention contains claims or sources.")
         return True, []
 
-    if not claims:
+    if not 1 <= len(claims) <= MAX_CLAIMS:
         raise ValueError(
-            "Non-abstention has no evidence claim."
+            f"Non-abstention must contain 1 to {MAX_CLAIMS} claims."
         )
 
     returned_ids = []
@@ -134,16 +118,12 @@ def validate_response(result, case, canonical):
             raise ValueError("Invalid source object.")
 
         source_id = source.get("chunk_id")
-
         if not isinstance(source_id, str):
             raise ValueError("Invalid source ID.")
 
         original = canonical.get(source_id)
-
         if original is None:
-            raise ValueError(
-                "Source absent from saved corpus."
-            )
+            raise ValueError("Source absent from saved corpus.")
 
         for field in (
             "text",
@@ -164,6 +144,7 @@ def validate_response(result, case, canonical):
 
     checks = []
     cited_ids = set()
+    seen_claims = set()
     rendered = []
 
     for claim in claims:
@@ -179,10 +160,15 @@ def validate_response(result, case, canonical):
         if not isinstance(quote, str) or not quote.strip():
             raise ValueError("Invalid quote.")
 
+        claim_key = (source_id, normalize(quote))
+        if claim_key in seen_claims:
+            raise ValueError("Duplicate evidence claim.")
+        seen_claims.add(claim_key)
+
         original = canonical.get(source_id)
 
-        # Preserves the previous benchmark's whitespace-normalized
-        # citation check. This does not establish answer correctness.
+        # Preserve the original whitespace-normalized citation metric.
+        # A real source quote is not necessarily a relevant answer.
         valid = bool(
             original
             and eligible(original, case)
@@ -195,33 +181,48 @@ def validate_response(result, case, canonical):
         rendered.append(f'"{quote.strip()}" [{source_id}]')
 
     if cited_ids != set(returned_ids):
-        raise ValueError(
-            "Returned sources differ from citations."
-        )
+        raise ValueError("Returned sources differ from citations.")
 
-    if answer.strip() != " ".join(rendered):
-        raise ValueError(
-            "Displayed answer differs from claims."
-        )
+    # Accept paragraph separators or spaces, but not extra answer text,
+    # altered quotations, missing citations, or reordered claims.
+    if normalize(answer) != normalize("\n\n".join(rendered)):
+        raise ValueError("Displayed answer differs from claims.")
 
     return False, checks
 
 
 def quotes_gold_evidence(result, case):
     """
-    True when a returned quote contains one of the case's reviewed
-    evidence phrases. A valid citation can still quote the wrong
-    sentence; this checks that it quotes the right one.
+    Legacy metric: at least one quote contains a reviewed evidence phrase.
+
+    This does NOT establish completeness or relevance of every claim.
     """
     if not isinstance(result, dict):
         return False
 
-    phrases = [normalize(p) for p in case.get("evidence_phrases", [])]
+    phrases = [
+        normalize(phrase)
+        for phrase in case.get("evidence_phrases", [])
+    ]
+    claims = result.get("claims") or []
 
     return any(
         phrase in normalize(claim.get("evidence_quote", ""))
-        for claim in result.get("claims") or []
+        for claim in claims
+        if isinstance(claim, dict)
+        and isinstance(claim.get("evidence_quote", ""), str)
         for phrase in phrases
+    )
+
+
+def valid_evidence_match(record):
+    """Evidence match on a completed, cited, non-declined response."""
+    return bool(
+        not record["answer_error"]
+        and not record["abstained"]
+        and record["citation_checks"]
+        and all(record["citation_checks"])
+        and quotes_gold_evidence(record["result"], record["case"])
     )
 
 
@@ -231,8 +232,7 @@ def ratio(numerator, denominator):
         "denominator": denominator,
         "percent": (
             round(100 * numerator / denominator, 2)
-            if denominator
-            else None
+            if denominator else None
         ),
     }
 
@@ -246,54 +246,37 @@ def latency_summary(values):
         }
 
     ordered = sorted(values)
-
     return {
         "n": len(values),
         "median_seconds": round(median(values), 4),
         "p95_seconds": round(
-            ordered[math.ceil(0.95 * len(ordered)) - 1],
-            4,
+            ordered[math.ceil(0.95 * len(ordered)) - 1], 4
         ),
     }
 
 
-def main():
-    dataset = json.loads(
-        DATASET_PATH.read_text(encoding="utf-8")
-    )
+def load_inputs():
+    dataset = json.loads(DATASET_PATH.read_text(encoding="utf-8"))
+    chunks = json.loads(CHUNKS_PATH.read_text(encoding="utf-8"))
 
     if dataset.get("labels_reviewed") is not True:
+        raise ValueError("Review benchmark labels before running.")
+
+    expected_hash = dataset.get("label_corpus_sha256")
+    if not expected_hash:
+        raise ValueError("Missing label_corpus_sha256.")
+
+    if corpus_digest(chunks) != expected_hash:
         raise ValueError(
-            "Review benchmark labels before running."
+            "Corpus differs from reviewed labels. "
+            "Review the labels before benchmarking."
         )
 
-    cases = dataset["cases"]
-    chunks = json.loads(
-        CHUNKS_PATH.read_text(encoding="utf-8")
-    )
-
-    expected_corpus_hash = dataset.get("label_corpus_sha256")
-
-    if not expected_corpus_hash:
-        raise ValueError(
-            "Missing label_corpus_sha256. "
-            "Apply the reviewed label update before benchmarking."
-        )
-
-    if corpus_digest(chunks) != expected_corpus_hash:
-        raise ValueError(
-            "Corpus differs from the corpus used for label review. "
-            "Review the chunk labels before benchmarking."
-        )
-
-    canonical = {
-        chunk["chunk_id"]: chunk
-        for chunk in chunks
-    }
-
+    canonical = {chunk["chunk_id"]: chunk for chunk in chunks}
     if len(canonical) != len(chunks):
         raise ValueError("Duplicate corpus chunk IDs.")
 
+    cases = dataset["cases"]
     if not cases:
         raise ValueError("Benchmark contains no cases.")
 
@@ -307,233 +290,28 @@ def main():
             )
 
         gold = case["relevant_chunk_ids"]
-
         if bool(gold) != case["answerable"]:
-            raise ValueError(
-                f"Inconsistent labels: {case['id']}"
-            )
+            raise ValueError(f"Inconsistent labels: {case['id']}")
 
         if len(gold) != len(set(gold)):
-            raise ValueError(
-                f"Duplicate gold labels: {case['id']}"
-            )
+            raise ValueError(f"Duplicate gold labels: {case['id']}")
 
         for chunk_id in gold:
             if chunk_id not in canonical:
-                raise ValueError(
-                    f"Unknown gold chunk: {chunk_id}"
-                )
-
+                raise ValueError(f"Unknown gold chunk: {chunk_id}")
             if not eligible(canonical[chunk_id], case):
-                raise ValueError(
-                    f"Gold chunk outside scope: {case['id']}"
-                )
+                raise ValueError(f"Gold chunk outside scope: {case['id']}")
 
     if not any(case["answerable"] for case in cases):
-        raise ValueError(
-            "At least one supported case is required."
-        )
+        raise ValueError("At least one supported case is required.")
 
-    tracked_paths = {
-        "dataset": DATASET_PATH,
-        "chunks": CHUNKS_PATH,
-        "embeddings": EMBEDDINGS_PATH,
-        "search.py": ROOT / "search.py",
-        "rerank.py": ROOT / "rerank.py",
-        "generate.py": ROOT / "generate.py",
-        "config.py": ROOT / "config.py",
-        "benchmark.py": Path(__file__).resolve(),
-    }
+    return dataset, canonical
 
-    initial_hashes = {
-        name: digest(path)
-        for name, path in tracked_paths.items()
-    }
 
-    # Imports load the embedding model.
-    # Model loading is excluded from request timings.
-    from config import OLLAMA_MODEL
-    from search import search
-    from rerank import get_reranker
-    from generate import (
-        answer_question,
-        MIN_RERANK_SCORE,
-        GENERATION_TOP_K,
-        CANDIDATE_K as GENERATION_CANDIDATE_K,
-        FALLBACK_ANSWER,
-    )
-
-    if GENERATION_CANDIDATE_K != CANDIDATE_K:
-        raise ValueError(
-            "Generation and benchmark candidate counts differ. "
-            f"Expected {CANDIDATE_K}, "
-            f"got {GENERATION_CANDIDATE_K}."
-        )
-
-    if not 1 <= GENERATION_TOP_K <= CANDIDATE_K:
-        raise ValueError(
-            "Require 1 <= GENERATION_TOP_K <= CANDIDATE_K."
-        )
-
-    if FALLBACK_ANSWER != EXPECTED_FALLBACK:
-        raise ValueError(
-            "Generation fallback differs from benchmark fallback."
-        )
-
-    settings = {
-        "candidate_k": CANDIDATE_K,
-        "generation_top_k": GENERATION_TOP_K,
-        "min_rerank_score": MIN_RERANK_SCORE,
-        "ollama_model": OLLAMA_MODEL,
-    }
-
-    print("BENCHMARK SETTINGS")
-    print(json.dumps(settings, indent=2))
-
-    # Use an existing development question for warm-up.
-    warmup_started = perf_counter()
-    get_reranker()
-
-    answer_question(
-        "Who approves my thesis?",
-        campus="New Brunswick",
-        program="MS Computer Science",
-    )
-
-    warmup_seconds = perf_counter() - warmup_started
-    settings["warmup_seconds"] = round(warmup_seconds, 4)
-
-    stamp = datetime.now(timezone.utc).strftime(
-        "%Y%m%dT%H%M%S%fZ"
-    )
-    run_dir = OUTPUT_DIR / stamp
-    run_dir.mkdir(parents=True, exist_ok=False)
-
-    print(f"\nRun folder: {run_dir.relative_to(ROOT)}")
-
-    records = []
-
-    for case in cases:
-        print(
-            f"\nChecking {case['id']}: {case['question']}",
-            flush=True,
-        )
-
-        record = {
-            "id": case["id"],
-            "case": case,
-            "retrieval_error": None,
-            "answer_error": None,
-            "result": None,
-            "abstained": False,
-            "citation_checks": [],
-        }
-
-        scope = {
-            "campus": case["campus"],
-            "program": case["program"],
-        }
-
-        # Evaluate both rankings on the identical candidate pool.
-        if case["answerable"]:
-            try:
-                candidates = search(
-                    case["question"],
-                    top_k=CANDIDATE_K,
-                    **scope,
-                )
-
-                original_ids = [
-                    passage["chunk_id"]
-                    for passage in candidates
-                ]
-
-                if candidates:
-                    scores = get_reranker().predict([
-                        (case["question"], passage["text"])
-                        for passage in candidates
-                    ])
-
-                    reranked = sorted(
-                        zip(candidates, scores),
-                        key=lambda pair: float(pair[1]),
-                        reverse=True,
-                    )
-
-                    reranked_ids = [
-                        passage["chunk_id"]
-                        for passage, _ in reranked
-                    ]
-                else:
-                    reranked_ids = []
-
-                gold = set(case["relevant_chunk_ids"])
-
-                record["embedding"] = ranking_metrics(
-                    original_ids, gold
-                )
-                record["reranked"] = ranking_metrics(
-                    reranked_ids, gold
-                )
-                record["embedding_ids"] = original_ids
-                record["reranked_ids"] = reranked_ids
-
-            except Exception as error:
-                record["retrieval_error"] = (
-                    f"{type(error).__name__}: {error}"
-                )
-
-                # Retrieval errors count as zero.
-                gold = set(case["relevant_chunk_ids"])
-                record["embedding"] = ranking_metrics([], gold)
-                record["reranked"] = ranking_metrics([], gold)
-
-        # Time the actual application call, including retrieval.
-        started = perf_counter()
-
-        try:
-            result = answer_question(
-                case["question"], **scope
-            )
-            record["result"] = result
-
-            abstained, checks = validate_response(
-                result, case, canonical
-            )
-            record["abstained"] = abstained
-            record["citation_checks"] = checks
-
-        except Exception as error:
-            record["answer_error"] = (
-                f"{type(error).__name__}: {error}"
-            )
-            print(
-                f"Answer error: {record['answer_error']}",
-                flush=True,
-            )
-
-        record["answer_seconds"] = perf_counter() - started
-        records.append(record)
-
-        with (run_dir / "cases.jsonl").open(
-            "a", encoding="utf-8"
-        ) as handle:
-            handle.write(
-                json.dumps(record, ensure_ascii=False) + "\n"
-            )
-
-    supported = [
-        record for record in records
-        if record["case"]["answerable"]
-    ]
-    unsupported = [
-        record for record in records
-        if not record["case"]["answerable"]
-    ]
-    completed = [
-        record for record in records
-        if not record["answer_error"]
-    ]
+def summarize(records):
+    supported = [r for r in records if r["case"]["answerable"]]
+    unsupported = [r for r in records if not r["case"]["answerable"]]
+    completed = [r for r in records if not r["answer_error"]]
 
     checks = [
         check
@@ -544,98 +322,102 @@ def main():
     retrieval = {
         method: {
             metric: round(
-                mean(
-                    record[method][metric]
-                    for record in supported
-                ),
+                mean(record[method][metric] for record in supported),
                 4,
             )
             for metric in (
-                "hit_at_1",
-                "hit_at_5",
-                "recall_at_5",
-                "mrr_at_7",
+                "hit_at_1", "hit_at_5", "recall_at_5", "mrr_at_7"
             )
         }
         for method in ("embedding", "reranked")
     }
 
-    summary = {
+    return {
         "retrieval": retrieval,
         "unsupported_abstention": ratio(
             sum(
-                record["abstained"]
-                and not record["answer_error"]
-                for record in unsupported
+                bool(r["abstained"]) and not r["answer_error"]
+                for r in unsupported
             ),
             len(unsupported),
         ),
         "supported_false_abstention": ratio(
             sum(
-                record["abstained"]
-                and not record["answer_error"]
-                for record in supported
+                bool(r["abstained"]) and not r["answer_error"]
+                for r in supported
             ),
             len(supported),
         ),
         "answer_errors": ratio(
-            sum(
-                bool(record["answer_error"])
-                for record in records
-            ),
+            sum(bool(r["answer_error"]) for r in records),
             len(records),
         ),
         "retrieval_errors": sum(
-            bool(record["retrieval_error"])
-            for record in records
+            bool(r["retrieval_error"]) for r in records
         ),
         "verbatim_citation_validity_on_completed_responses": ratio(
             sum(checks), len(checks)
         ),
+        # Retained exactly as a legacy calculation for comparison.
         "supported_quotes_gold_evidence": ratio(
             sum(
-                quotes_gold_evidence(record["result"], record["case"])
-                for record in supported
+                quotes_gold_evidence(r["result"], r["case"])
+                for r in supported
             ),
             len(supported),
         ),
+        "supported_valid_responses_with_gold_evidence": ratio(
+            sum(valid_evidence_match(r) for r in supported),
+            len(supported),
+        ),
+        "multi_claim_completed_responses": sum(
+            len((r["result"] or {}).get("claims", [])) > 1
+            for r in completed
+        ),
         "supported_answer_correctness": "PENDING_MANUAL_REVIEW",
         "successful_call_latency": latency_summary([
-            record["answer_seconds"]
-            for record in completed
+            r["answer_seconds"] for r in completed
         ]),
         "successful_answerable_call_latency": latency_summary([
-            record["answer_seconds"]
-            for record in supported
-            if not record["answer_error"]
+            r["answer_seconds"]
+            for r in supported if not r["answer_error"]
         ]),
         "successful_unsupported_call_latency": latency_summary([
-            record["answer_seconds"]
-            for record in unsupported
-            if not record["answer_error"]
+            r["answer_seconds"]
+            for r in unsupported if not r["answer_error"]
         ]),
     }
+
+
+def write_outputs(run_dir, records, report):
+    with (run_dir / "cases.jsonl").open("w", encoding="utf-8") as handle:
+        for record in records:
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+    fields = [
+        "id",
+        "question",
+        "answerable",
+        "expected_answer",
+        "answer",
+        "model_needed",
+        "model_answer_words",
+        "declined_reason",
+        "quotes_gold_evidence",
+        "error",
+        "correct",
+        "notes",
+        "claim_count",
+        "claims_json",
+        "additional_evidence_json",
+        "citation_checks_json",
+        "valid_response_with_gold_evidence",
+    ]
 
     with (run_dir / "review.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
-        writer = csv.DictWriter(
-            handle,
-            fieldnames=[
-                "id",
-                "question",
-                "answerable",
-                "expected_answer",
-                "answer",
-                "model_needed",
-                "model_answer_words",
-                "declined_reason",
-                "quotes_gold_evidence",
-                "error",
-                "correct",
-                "notes",
-            ],
-        )
+        writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
 
         for record in records:
@@ -645,6 +427,7 @@ def main():
                 result = {}
 
             selection = result.get("selection") or {}
+            claims = result.get("claims") or []
 
             writer.writerow({
                 "id": case["id"],
@@ -662,23 +445,306 @@ def main():
                 "error": record["answer_error"] or "",
                 "correct": "",
                 "notes": "",
+                "claim_count": len(claims),
+                "claims_json": json.dumps(claims, ensure_ascii=False),
+                "additional_evidence_json": json.dumps(
+                    selection.get("additional_evidence", []),
+                    ensure_ascii=False,
+                ),
+                "citation_checks_json": json.dumps(
+                    record["citation_checks"]
+                ),
+                "valid_response_with_gold_evidence": (
+                    valid_evidence_match(record)
+                    if case["answerable"] else ""
+                ),
             })
 
-    # Detect changes to data or code while the run was active.
+    report["summary"] = summarize(records)
+    report["validator_version"] = VALIDATOR_VERSION
+    report["metric_notes"] = {
+        "supported_quotes_gold_evidence": (
+            "Legacy metric: any returned quote matches any reviewed "
+            "phrase, even if another response-contract check fails."
+        ),
+        "supported_valid_responses_with_gold_evidence": (
+            "Requires no answer error, no decline, valid citations, "
+            "and at least one reviewed phrase match."
+        ),
+        "correctness": (
+            "Neither evidence-match metric proves completeness or "
+            "relevance of all claims. Review the full answer."
+        ),
+        "latency": (
+            "Sequential Python-call timings, not HTTP or load-test "
+            "measurements. Rescoring reuses original call timings."
+        ),
+    }
+
+    (run_dir / "report.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    print("\nBENCHMARK SUMMARY")
+    print(json.dumps(report["summary"], indent=2))
+    print(f"\nSaved run: {run_dir}")
+    print(f"Review file: {run_dir / 'review.csv'}")
+    print("Answer correctness remains pending manual review.")
+
+
+def new_run_dir(prefix=""):
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    run_dir = OUTPUT_DIR / f"{prefix}{stamp}"
+    run_dir.mkdir(parents=True, exist_ok=False)
+    return run_dir
+
+
+def rescore_saved_run(source_dir):
+    """Revalidate stored responses without loading or calling models."""
+    source_dir = source_dir.resolve()
+    dataset, canonical = load_inputs()
+
+    old_report = json.loads(
+        (source_dir / "report.json").read_text(encoding="utf-8")
+    )
+
+    old_hashes = old_report.get("hashes", {})
+    if old_hashes.get("dataset") != digest(DATASET_PATH):
+        raise ValueError("Dataset differs from the saved run.")
+
+    if old_hashes.get("chunks") != digest(CHUNKS_PATH):
+        raise ValueError("Chunk corpus differs from the saved run.")
+
+    records = [
+        json.loads(line)
+        for line in (source_dir / "cases.jsonl")
+        .read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+    expected_cases = {case["id"]: case for case in dataset["cases"]}
+    if (
+        len(records) != len(expected_cases)
+        or {r["id"] for r in records} != set(expected_cases)
+    ):
+        raise ValueError("Saved run has missing or duplicate cases.")
+
+    for record in records:
+        if record["case"] != expected_cases[record["id"]]:
+            raise ValueError(f"Saved case changed: {record['id']}")
+
+        previous_error = record.get("answer_error")
+        record["previous_answer_error"] = previous_error
+        record["abstained"] = False
+        record["citation_checks"] = []
+
+        if record.get("result") is None:
+            # A generation failure produced no response to revalidate.
+            # Keep its original error; never turn it into a decline.
+            record["answer_error"] = (
+                previous_error or "No saved application response."
+            )
+            continue
+
+        try:
+            abstained, checks = validate_response(
+                record["result"], record["case"], canonical
+            )
+            record["abstained"] = abstained
+            record["citation_checks"] = checks
+            record["answer_error"] = None
+        except Exception as error:
+            record["answer_error"] = (
+                f"{type(error).__name__}: {error}"
+            )
+
+        if previous_error != record["answer_error"]:
+            print(
+                f"{record['id']}: "
+                f"{previous_error or 'no error'} -> "
+                f"{record['answer_error'] or 'no error'}"
+            )
+
+    report = dict(old_report)
+    report["original_created_at"] = old_report.get("created_at")
+    report["created_at"] = datetime.now(timezone.utc).isoformat()
+    report["run_type"] = "rescore"
+    report["rescored_from"] = str(source_dir)
+    report["rescore_benchmark_sha256"] = digest(Path(__file__))
+    report["rescore_git_commit"] = git_output("rev-parse", "HEAD")
+    report["rescore_git_status"] = git_output("status", "--short")
+    report["rescore_note"] = (
+        "No model calls were made. Original generation hashes, settings, "
+        "environment, and call timings are preserved. Manual review "
+        "columns are blank; original files remain untouched."
+    )
+
+    run_dir = new_run_dir("rescore_")
+    write_outputs(run_dir, records, report)
+
+
+def run_benchmark():
+    dataset, canonical = load_inputs()
+    cases = dataset["cases"]
+
+    tracked_paths = {
+        "dataset": DATASET_PATH,
+        "chunks": CHUNKS_PATH,
+        "embeddings": EMBEDDINGS_PATH,
+        "search.py": ROOT / "search.py",
+        "rerank.py": ROOT / "rerank.py",
+        "generate.py": ROOT / "generate.py",
+        "config.py": ROOT / "config.py",
+        "benchmark.py": Path(__file__).resolve(),
+    }
+    initial_hashes = {
+        name: digest(path) for name, path in tracked_paths.items()
+    }
+
+    from config import OLLAMA_MODEL
+    from search import search
+    from rerank import get_reranker
+    from generate import (
+        answer_question,
+        MIN_RERANK_SCORE,
+        GENERATION_TOP_K,
+        CANDIDATE_K as GENERATION_CANDIDATE_K,
+        FALLBACK_ANSWER,
+    )
+
+    if GENERATION_CANDIDATE_K != CANDIDATE_K:
+        raise ValueError("Generation and benchmark candidate counts differ.")
+
+    if not 1 <= GENERATION_TOP_K <= CANDIDATE_K:
+        raise ValueError("Require 1 <= GENERATION_TOP_K <= CANDIDATE_K.")
+
+    if FALLBACK_ANSWER != EXPECTED_FALLBACK:
+        raise ValueError("Generation and benchmark fallbacks differ.")
+
+    settings = {
+        "candidate_k": CANDIDATE_K,
+        "generation_top_k": GENERATION_TOP_K,
+        "min_rerank_score": MIN_RERANK_SCORE,
+        "ollama_model": OLLAMA_MODEL,
+        "max_claims": MAX_CLAIMS,
+    }
+
+    print("BENCHMARK SETTINGS")
+    print(json.dumps(settings, indent=2))
+
+    warmup_started = perf_counter()
+    get_reranker()
+
+    # Preserve fail-fast behavior if warm-up cannot generate a response.
+    answer_question(
+        "Who approves my thesis?",
+        campus="New Brunswick",
+        program="MS Computer Science",
+    )
+    settings["warmup_seconds"] = round(
+        perf_counter() - warmup_started, 4
+    )
+
+    run_dir = new_run_dir()
+    print(f"\nRun folder: {run_dir}")
+    records = []
+
+    for case in cases:
+        print(
+            f"\nChecking {case['id']}: {case['question']}",
+            flush=True,
+        )
+        record = {
+            "id": case["id"],
+            "case": case,
+            "retrieval_error": None,
+            "answer_error": None,
+            "result": None,
+            "abstained": False,
+            "citation_checks": [],
+        }
+        scope = {
+            "campus": case["campus"],
+            "program": case["program"],
+        }
+
+        if case["answerable"]:
+            gold = set(case["relevant_chunk_ids"])
+            try:
+                candidates = search(
+                    case["question"],
+                    top_k=CANDIDATE_K,
+                    **scope,
+                )
+                original_ids = [p["chunk_id"] for p in candidates]
+
+                if candidates:
+                    scores = get_reranker().predict([
+                        (case["question"], p["text"])
+                        for p in candidates
+                    ])
+                    ranked = sorted(
+                        zip(candidates, scores),
+                        key=lambda pair: float(pair[1]),
+                        reverse=True,
+                    )
+                    reranked_ids = [p["chunk_id"] for p, _ in ranked]
+                else:
+                    reranked_ids = []
+
+                record["embedding"] = ranking_metrics(original_ids, gold)
+                record["reranked"] = ranking_metrics(reranked_ids, gold)
+                record["embedding_ids"] = original_ids
+                record["reranked_ids"] = reranked_ids
+
+            except Exception as error:
+                record["retrieval_error"] = (
+                    f"{type(error).__name__}: {error}"
+                )
+                record["embedding"] = ranking_metrics([], gold)
+                record["reranked"] = ranking_metrics([], gold)
+
+        started = perf_counter()
+        try:
+            result = answer_question(case["question"], **scope)
+            record["result"] = result
+
+            abstained, checks = validate_response(
+                result, case, canonical
+            )
+            record["abstained"] = abstained
+            record["citation_checks"] = checks
+
+        except Exception as error:
+            record["answer_error"] = (
+                f"{type(error).__name__}: {error}"
+            )
+            print(f"Answer error: {record['answer_error']}", flush=True)
+
+        record["answer_seconds"] = perf_counter() - started
+        records.append(record)
+
+        # Save each response immediately in case a later call is interrupted.
+        with (run_dir / "cases.jsonl").open(
+            "a", encoding="utf-8"
+        ) as handle:
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
     for name, path in tracked_paths.items():
         if digest(path) != initial_hashes[name]:
             raise ValueError(
-                f"{name} changed during benchmark. "
-                "Discard this run."
+                f"{name} changed during benchmark. Discard this run."
             )
 
     report = {
         "name": dataset["name"],
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "run_type": "live",
         "git_commit": git_output("rev-parse", "HEAD"),
         "git_status": git_output("status", "--short"),
         "hashes": initial_hashes,
-        "label_corpus_sha256": expected_corpus_hash,
+        "label_corpus_sha256": dataset["label_corpus_sha256"],
         "label_revision": dataset.get("label_revision"),
         "environment": {
             "python": platform.python_version(),
@@ -686,37 +752,33 @@ def main():
             "machine": platform.machine(),
         },
         "settings": settings,
-        "summary": summary,
         "limitations": [
             "Curated source-derived questions on five documents.",
             "Not an independent general-accuracy benchmark.",
-            "Gold chunk labels are derived from reviewed evidence phrases; "
-        "review phrase changes, not only chunk IDs.",
-            "Citation validity does not establish answer relevance.",
             "Citation matching normalizes whitespace.",
-            "Correctness requires manual review of complete answers.",
-            "Sequential Python-call latency after warm-up, not HTTP latency.",
-            "One call per case; latency is exploratory, not a load test.",
+            "Citation validity does not establish answer relevance.",
+            "Evidence matches do not establish full-answer correctness.",
+            "Correctness requires manual review of all returned claims.",
             "Answer errors are separate from successful abstentions.",
             "Corpus hashing does not prove embeddings match the corpus.",
         ],
     }
+    write_outputs(run_dir, records, report)
 
-    (run_dir / "report.json").write_text(
-        json.dumps(
-            report, indent=2, ensure_ascii=False
-        ) + "\n",
-        encoding="utf-8",
-    )
 
-    print("\nBENCHMARK SUMMARY")
-    print(json.dumps(summary, indent=2))
-    print(f"\nSaved run: {run_dir.relative_to(ROOT)}")
-    print(f"Review file: {run_dir / 'review.csv'}")
-    print(
-        "Answer correctness remains pending "
-        "until review.csv is graded."
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--rescore",
+        type=Path,
+        help="Revalidate an existing run without making model calls.",
     )
+    args = parser.parse_args()
+
+    if args.rescore:
+        rescore_saved_run(args.rescore)
+    else:
+        run_benchmark()
 
 
 if __name__ == "__main__":
